@@ -17,6 +17,8 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    BOXING_DATA_API_HOST: z.string(),
+    BOXING_DATA_API_KEY: z.string(),
   },
 
   /**
@@ -38,6 +40,8 @@ export const env = createEnv({
     AUTH_DISCORD_SECRET: process.env.AUTH_DISCORD_SECRET,
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    BOXING_DATA_API_HOST: process.env.BOXING_DATA_API_HOST,
+    BOXING_DATA_API_KEY: process.env.BOXING_DATA_API_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

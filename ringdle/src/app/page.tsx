@@ -1,15 +1,8 @@
-import Link from "next/link";
-import { LatestPost } from "~/app/_components/post";
-import { auth } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from "~/components/ui/card";
+import { api } from "~/trpc/server";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-  const session = await auth();
-
-  if (session?.user) {
-    void api.post.getLatest.prefetch();
-  }
+  const fighter = await api.boxing.getFighterById({ id: "6715fc1faf69bb50508b7a83" });
 
   return (
     <div>
@@ -22,11 +15,24 @@ export default async function Home() {
       <input type="text" placeholder="Search" />
       <button>Test</button>
 
-      <ul>
-        <li>Category 1</li>
-        <li>Category 2</li>
-        <li>Category 3</li>
-      </ul>
+      {/* Fighter data */}
+      <section>
+        <h2>Fighter Data</h2>
+        <Card>
+          <CardHeader>
+            <CardTitle>{fighter.name}</CardTitle>
+          </CardHeader>
+          <CardDescription>{fighter.alias}</CardDescription>
+          <CardContent>
+            <p>{fighter.nationality}</p>
+            <p>{fighter.division.name}</p>
+            <p>{fighter.stats.wins} Wins</p>
+            <p>{fighter.stats.losses} Losses</p>
+          </CardContent>  
+          <CardFooter>
+          </CardFooter>
+        </Card>
+      </section>
     </div>
   );
 }
