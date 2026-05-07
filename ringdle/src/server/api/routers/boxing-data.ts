@@ -1,28 +1,71 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { env } from "@/env";
-import type { BoxingDataResponse } from "./types/boxing-data.types";
+import { db } from "@/server/db";
+import type { BoxingDataFighter, BoxingDataFighterTitle } from "./types/boxing-data.types";
+import type { Fighter } from "../../../../generated/prisma";
 
+function toBoxingDataFighter(f: Fighter): BoxingDataFighter {
+  return {
+    id: f.id,
+    name: f.name,
+    age: f.age,
+    gender: f.gender,
+    nickname: f.nickname ?? null,
+    alias: f.alias ?? null,
+    nationality: f.nationality,
+    nationality_code: f.nationalityCode,
+    stance: f.stance,
+    debut: f.debut,
+    height: f.height,
+    height_cm: f.heightCm,
+    height_in: f.heightIn,
+    height_ft: f.heightFt,
+    reach: f.reach,
+    reach_cm: f.reachCm,
+    reach_in: f.reachIn,
+    stats: {
+      wins: f.wins,
+      losses: f.losses,
+      draws: f.draws,
+      total_bouts: f.totalBouts ?? undefined,
+      total_rounds: f.totalRounds ?? undefined,
+      ko_wins: f.koWins ?? undefined,
+      stopped: f.stopped ?? undefined,
+    },
+    division: {
+      id: f.divisionId,
+      name: f.divisionName,
+      weight_lb: f.divisionWeightLb ?? null,
+      weight_kg: f.divisionWeightKg ?? null,
+    },
+    titles: JSON.parse(f.titles) as BoxingDataFighterTitle[],
+  };
+}
+
+// Router for boxing data API
 export const boxingRouter = createTRPCRouter({
   getFighterById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
-      const url = `https://${env.BOXING_DATA_API_HOST}/v2/fighters/${input.id}`;
+      const fighter = await db.fighter.findUnique({ where: { id: input.id } });
 
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": env.BOXING_DATA_API_HOST,
-          "x-rapidapi-key": env.BOXING_DATA_API_KEY,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch data from Boxing API");
+      if (!fighter) {
+        throw new Error(`Fighter with id "${input.id}" not found in database`);
       }
 
-      const json = await response.json() as BoxingDataResponse;
-      console.log("stats:", JSON.stringify(json.data.stats, null, 2));
-      return json.data;
+      return toBoxingDataFighter(fighter);
+    }),
+
+  // Get a random fighter from the database
+  getRandomFighter: publicProcedure
+    .query(async () => {
+      const fighters = await db.fighter.findMany();
+
+      if (fighters.length === 0) {
+        throw new Error("No fighters in database — run npm run db:seed first");
+      }
+
+      const random = fighters[Math.floor(Math.random() * fighters.length)]!;
+      return toBoxingDataFighter(random);
     }),
 });

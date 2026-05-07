@@ -73,3 +73,39 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+// Fighter model for database seeding
+model Fighter {
+  id              String  @id
+  name            String
+  age             Int
+  gender          String
+  nickname        String?
+  alias           String?
+  nationality     String
+  nationalityCode String
+  stance          String
+  debut           String
+  height          String
+  heightCm        Float
+  heightIn        Float
+  heightFt        String
+  reach           String
+  reachCm         Float
+  reachIn         Float
+
+  wins        Int
+  losses      Int
+  draws       Int
+  totalBouts  Int?
+  totalRounds Int?
+  koWins      Int?
+  stopped     Int?
+
+  divisionId       String
+  divisionName     String
+  divisionWeightLb Float?
+  divisionWeightKg Float?
+
+  titles String @default("[]")
+}

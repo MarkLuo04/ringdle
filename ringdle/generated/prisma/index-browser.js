@@ -163,6 +163,38 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.FighterScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  age: 'age',
+  gender: 'gender',
+  nickname: 'nickname',
+  alias: 'alias',
+  nationality: 'nationality',
+  nationalityCode: 'nationalityCode',
+  stance: 'stance',
+  debut: 'debut',
+  height: 'height',
+  heightCm: 'heightCm',
+  heightIn: 'heightIn',
+  heightFt: 'heightFt',
+  reach: 'reach',
+  reachCm: 'reachCm',
+  reachIn: 'reachIn',
+  wins: 'wins',
+  losses: 'losses',
+  draws: 'draws',
+  totalBouts: 'totalBouts',
+  totalRounds: 'totalRounds',
+  koWins: 'koWins',
+  stopped: 'stopped',
+  divisionId: 'divisionId',
+  divisionName: 'divisionName',
+  divisionWeightLb: 'divisionWeightLb',
+  divisionWeightKg: 'divisionWeightKg',
+  titles: 'titles'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -179,7 +211,8 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   User: 'User',
-  VerificationToken: 'VerificationToken'
+  VerificationToken: 'VerificationToken',
+  Fighter: 'Fighter'
 };
 
 /**

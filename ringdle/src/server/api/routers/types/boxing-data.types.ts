@@ -2,8 +2,8 @@ export interface BoxingDataFighterStats {
   wins: number;
   losses: number;
   draws: number;
-  total_bouts: number;
-  total_rounds: number;
+  total_bouts?: number;
+  total_rounds?: number;
   ko_wins?: number;
   stopped?: number;
 }
@@ -13,6 +13,11 @@ export interface BoxingDataFighterDivision {
   name: string;
   weight_lb: number | null;
   weight_kg: number | null;
+}
+
+export interface BoxingDataFighterTitle {
+  id: string;
+  name: string;
 }
 
 export interface BoxingDataFighter {
@@ -35,7 +40,7 @@ export interface BoxingDataFighter {
   alias?: string | null;
   stats: BoxingDataFighterStats;
   division: BoxingDataFighterDivision;
-  titles: string[];
+  titles: BoxingDataFighterTitle[];
 }
 
 export interface BoxingDataResponse {
@@ -50,4 +55,18 @@ export interface BoxingDataResponse {
   };
   error: object;
   data: BoxingDataFighter;
+}
+
+export interface BoxingDataListResponse {
+  metadata: {
+    timestamp: string;
+  };
+  pagination: {
+    page: number;
+    items: number;
+    total_pages: number;
+    total_items: number;
+  };
+  error: object;
+  data: BoxingDataFighter[];
 }

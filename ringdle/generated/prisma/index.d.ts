@@ -38,6 +38,11 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTokenPayload>
+/**
+ * Model Fighter
+ * 
+ */
+export type Fighter = $Result.DefaultSelection<Prisma.$FighterPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -206,6 +211,16 @@ export class PrismaClient<
     * ```
     */
   get verificationToken(): Prisma.VerificationTokenDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fighter`: Exposes CRUD operations for the **Fighter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Fighters
+    * const fighters = await prisma.fighter.findMany()
+    * ```
+    */
+  get fighter(): Prisma.FighterDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -651,7 +666,8 @@ export namespace Prisma {
     Account: 'Account',
     Session: 'Session',
     User: 'User',
-    VerificationToken: 'VerificationToken'
+    VerificationToken: 'VerificationToken',
+    Fighter: 'Fighter'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -670,7 +686,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "post" | "account" | "session" | "user" | "verificationToken"
+      modelProps: "post" | "account" | "session" | "user" | "verificationToken" | "fighter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1044,6 +1060,80 @@ export namespace Prisma {
           }
         }
       }
+      Fighter: {
+        payload: Prisma.$FighterPayload<ExtArgs>
+        fields: Prisma.FighterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FighterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FighterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          findFirst: {
+            args: Prisma.FighterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FighterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          findMany: {
+            args: Prisma.FighterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>[]
+          }
+          create: {
+            args: Prisma.FighterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          createMany: {
+            args: Prisma.FighterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FighterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>[]
+          }
+          delete: {
+            args: Prisma.FighterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          update: {
+            args: Prisma.FighterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          deleteMany: {
+            args: Prisma.FighterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FighterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FighterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>[]
+          }
+          upsert: {
+            args: Prisma.FighterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FighterPayload>
+          }
+          aggregate: {
+            args: Prisma.FighterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFighter>
+          }
+          groupBy: {
+            args: Prisma.FighterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FighterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FighterCountArgs<ExtArgs>
+            result: $Utils.Optional<FighterCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1145,6 +1235,7 @@ export namespace Prisma {
     session?: SessionOmit
     user?: UserOmit
     verificationToken?: VerificationTokenOmit
+    fighter?: FighterOmit
   }
 
   /* Types for Logging */
@@ -6696,6 +6787,1397 @@ export namespace Prisma {
 
 
   /**
+   * Model Fighter
+   */
+
+  export type AggregateFighter = {
+    _count: FighterCountAggregateOutputType | null
+    _avg: FighterAvgAggregateOutputType | null
+    _sum: FighterSumAggregateOutputType | null
+    _min: FighterMinAggregateOutputType | null
+    _max: FighterMaxAggregateOutputType | null
+  }
+
+  export type FighterAvgAggregateOutputType = {
+    age: number | null
+    heightCm: number | null
+    heightIn: number | null
+    reachCm: number | null
+    reachIn: number | null
+    wins: number | null
+    losses: number | null
+    draws: number | null
+    totalBouts: number | null
+    totalRounds: number | null
+    koWins: number | null
+    stopped: number | null
+    divisionWeightLb: number | null
+    divisionWeightKg: number | null
+  }
+
+  export type FighterSumAggregateOutputType = {
+    age: number | null
+    heightCm: number | null
+    heightIn: number | null
+    reachCm: number | null
+    reachIn: number | null
+    wins: number | null
+    losses: number | null
+    draws: number | null
+    totalBouts: number | null
+    totalRounds: number | null
+    koWins: number | null
+    stopped: number | null
+    divisionWeightLb: number | null
+    divisionWeightKg: number | null
+  }
+
+  export type FighterMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    age: number | null
+    gender: string | null
+    nickname: string | null
+    alias: string | null
+    nationality: string | null
+    nationalityCode: string | null
+    stance: string | null
+    debut: string | null
+    height: string | null
+    heightCm: number | null
+    heightIn: number | null
+    heightFt: string | null
+    reach: string | null
+    reachCm: number | null
+    reachIn: number | null
+    wins: number | null
+    losses: number | null
+    draws: number | null
+    totalBouts: number | null
+    totalRounds: number | null
+    koWins: number | null
+    stopped: number | null
+    divisionId: string | null
+    divisionName: string | null
+    divisionWeightLb: number | null
+    divisionWeightKg: number | null
+    titles: string | null
+  }
+
+  export type FighterMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    age: number | null
+    gender: string | null
+    nickname: string | null
+    alias: string | null
+    nationality: string | null
+    nationalityCode: string | null
+    stance: string | null
+    debut: string | null
+    height: string | null
+    heightCm: number | null
+    heightIn: number | null
+    heightFt: string | null
+    reach: string | null
+    reachCm: number | null
+    reachIn: number | null
+    wins: number | null
+    losses: number | null
+    draws: number | null
+    totalBouts: number | null
+    totalRounds: number | null
+    koWins: number | null
+    stopped: number | null
+    divisionId: string | null
+    divisionName: string | null
+    divisionWeightLb: number | null
+    divisionWeightKg: number | null
+    titles: string | null
+  }
+
+  export type FighterCountAggregateOutputType = {
+    id: number
+    name: number
+    age: number
+    gender: number
+    nickname: number
+    alias: number
+    nationality: number
+    nationalityCode: number
+    stance: number
+    debut: number
+    height: number
+    heightCm: number
+    heightIn: number
+    heightFt: number
+    reach: number
+    reachCm: number
+    reachIn: number
+    wins: number
+    losses: number
+    draws: number
+    totalBouts: number
+    totalRounds: number
+    koWins: number
+    stopped: number
+    divisionId: number
+    divisionName: number
+    divisionWeightLb: number
+    divisionWeightKg: number
+    titles: number
+    _all: number
+  }
+
+
+  export type FighterAvgAggregateInputType = {
+    age?: true
+    heightCm?: true
+    heightIn?: true
+    reachCm?: true
+    reachIn?: true
+    wins?: true
+    losses?: true
+    draws?: true
+    totalBouts?: true
+    totalRounds?: true
+    koWins?: true
+    stopped?: true
+    divisionWeightLb?: true
+    divisionWeightKg?: true
+  }
+
+  export type FighterSumAggregateInputType = {
+    age?: true
+    heightCm?: true
+    heightIn?: true
+    reachCm?: true
+    reachIn?: true
+    wins?: true
+    losses?: true
+    draws?: true
+    totalBouts?: true
+    totalRounds?: true
+    koWins?: true
+    stopped?: true
+    divisionWeightLb?: true
+    divisionWeightKg?: true
+  }
+
+  export type FighterMinAggregateInputType = {
+    id?: true
+    name?: true
+    age?: true
+    gender?: true
+    nickname?: true
+    alias?: true
+    nationality?: true
+    nationalityCode?: true
+    stance?: true
+    debut?: true
+    height?: true
+    heightCm?: true
+    heightIn?: true
+    heightFt?: true
+    reach?: true
+    reachCm?: true
+    reachIn?: true
+    wins?: true
+    losses?: true
+    draws?: true
+    totalBouts?: true
+    totalRounds?: true
+    koWins?: true
+    stopped?: true
+    divisionId?: true
+    divisionName?: true
+    divisionWeightLb?: true
+    divisionWeightKg?: true
+    titles?: true
+  }
+
+  export type FighterMaxAggregateInputType = {
+    id?: true
+    name?: true
+    age?: true
+    gender?: true
+    nickname?: true
+    alias?: true
+    nationality?: true
+    nationalityCode?: true
+    stance?: true
+    debut?: true
+    height?: true
+    heightCm?: true
+    heightIn?: true
+    heightFt?: true
+    reach?: true
+    reachCm?: true
+    reachIn?: true
+    wins?: true
+    losses?: true
+    draws?: true
+    totalBouts?: true
+    totalRounds?: true
+    koWins?: true
+    stopped?: true
+    divisionId?: true
+    divisionName?: true
+    divisionWeightLb?: true
+    divisionWeightKg?: true
+    titles?: true
+  }
+
+  export type FighterCountAggregateInputType = {
+    id?: true
+    name?: true
+    age?: true
+    gender?: true
+    nickname?: true
+    alias?: true
+    nationality?: true
+    nationalityCode?: true
+    stance?: true
+    debut?: true
+    height?: true
+    heightCm?: true
+    heightIn?: true
+    heightFt?: true
+    reach?: true
+    reachCm?: true
+    reachIn?: true
+    wins?: true
+    losses?: true
+    draws?: true
+    totalBouts?: true
+    totalRounds?: true
+    koWins?: true
+    stopped?: true
+    divisionId?: true
+    divisionName?: true
+    divisionWeightLb?: true
+    divisionWeightKg?: true
+    titles?: true
+    _all?: true
+  }
+
+  export type FighterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fighter to aggregate.
+     */
+    where?: FighterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fighters to fetch.
+     */
+    orderBy?: FighterOrderByWithRelationInput | FighterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FighterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fighters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fighters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Fighters
+    **/
+    _count?: true | FighterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FighterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FighterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FighterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FighterMaxAggregateInputType
+  }
+
+  export type GetFighterAggregateType<T extends FighterAggregateArgs> = {
+        [P in keyof T & keyof AggregateFighter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFighter[P]>
+      : GetScalarType<T[P], AggregateFighter[P]>
+  }
+
+
+
+
+  export type FighterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FighterWhereInput
+    orderBy?: FighterOrderByWithAggregationInput | FighterOrderByWithAggregationInput[]
+    by: FighterScalarFieldEnum[] | FighterScalarFieldEnum
+    having?: FighterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FighterCountAggregateInputType | true
+    _avg?: FighterAvgAggregateInputType
+    _sum?: FighterSumAggregateInputType
+    _min?: FighterMinAggregateInputType
+    _max?: FighterMaxAggregateInputType
+  }
+
+  export type FighterGroupByOutputType = {
+    id: string
+    name: string
+    age: number
+    gender: string
+    nickname: string | null
+    alias: string | null
+    nationality: string
+    nationalityCode: string
+    stance: string
+    debut: string
+    height: string
+    heightCm: number
+    heightIn: number
+    heightFt: string
+    reach: string
+    reachCm: number
+    reachIn: number
+    wins: number
+    losses: number
+    draws: number
+    totalBouts: number | null
+    totalRounds: number | null
+    koWins: number | null
+    stopped: number | null
+    divisionId: string
+    divisionName: string
+    divisionWeightLb: number | null
+    divisionWeightKg: number | null
+    titles: string
+    _count: FighterCountAggregateOutputType | null
+    _avg: FighterAvgAggregateOutputType | null
+    _sum: FighterSumAggregateOutputType | null
+    _min: FighterMinAggregateOutputType | null
+    _max: FighterMaxAggregateOutputType | null
+  }
+
+  type GetFighterGroupByPayload<T extends FighterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FighterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FighterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FighterGroupByOutputType[P]>
+            : GetScalarType<T[P], FighterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FighterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    age?: boolean
+    gender?: boolean
+    nickname?: boolean
+    alias?: boolean
+    nationality?: boolean
+    nationalityCode?: boolean
+    stance?: boolean
+    debut?: boolean
+    height?: boolean
+    heightCm?: boolean
+    heightIn?: boolean
+    heightFt?: boolean
+    reach?: boolean
+    reachCm?: boolean
+    reachIn?: boolean
+    wins?: boolean
+    losses?: boolean
+    draws?: boolean
+    totalBouts?: boolean
+    totalRounds?: boolean
+    koWins?: boolean
+    stopped?: boolean
+    divisionId?: boolean
+    divisionName?: boolean
+    divisionWeightLb?: boolean
+    divisionWeightKg?: boolean
+    titles?: boolean
+  }, ExtArgs["result"]["fighter"]>
+
+  export type FighterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    age?: boolean
+    gender?: boolean
+    nickname?: boolean
+    alias?: boolean
+    nationality?: boolean
+    nationalityCode?: boolean
+    stance?: boolean
+    debut?: boolean
+    height?: boolean
+    heightCm?: boolean
+    heightIn?: boolean
+    heightFt?: boolean
+    reach?: boolean
+    reachCm?: boolean
+    reachIn?: boolean
+    wins?: boolean
+    losses?: boolean
+    draws?: boolean
+    totalBouts?: boolean
+    totalRounds?: boolean
+    koWins?: boolean
+    stopped?: boolean
+    divisionId?: boolean
+    divisionName?: boolean
+    divisionWeightLb?: boolean
+    divisionWeightKg?: boolean
+    titles?: boolean
+  }, ExtArgs["result"]["fighter"]>
+
+  export type FighterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    age?: boolean
+    gender?: boolean
+    nickname?: boolean
+    alias?: boolean
+    nationality?: boolean
+    nationalityCode?: boolean
+    stance?: boolean
+    debut?: boolean
+    height?: boolean
+    heightCm?: boolean
+    heightIn?: boolean
+    heightFt?: boolean
+    reach?: boolean
+    reachCm?: boolean
+    reachIn?: boolean
+    wins?: boolean
+    losses?: boolean
+    draws?: boolean
+    totalBouts?: boolean
+    totalRounds?: boolean
+    koWins?: boolean
+    stopped?: boolean
+    divisionId?: boolean
+    divisionName?: boolean
+    divisionWeightLb?: boolean
+    divisionWeightKg?: boolean
+    titles?: boolean
+  }, ExtArgs["result"]["fighter"]>
+
+  export type FighterSelectScalar = {
+    id?: boolean
+    name?: boolean
+    age?: boolean
+    gender?: boolean
+    nickname?: boolean
+    alias?: boolean
+    nationality?: boolean
+    nationalityCode?: boolean
+    stance?: boolean
+    debut?: boolean
+    height?: boolean
+    heightCm?: boolean
+    heightIn?: boolean
+    heightFt?: boolean
+    reach?: boolean
+    reachCm?: boolean
+    reachIn?: boolean
+    wins?: boolean
+    losses?: boolean
+    draws?: boolean
+    totalBouts?: boolean
+    totalRounds?: boolean
+    koWins?: boolean
+    stopped?: boolean
+    divisionId?: boolean
+    divisionName?: boolean
+    divisionWeightLb?: boolean
+    divisionWeightKg?: boolean
+    titles?: boolean
+  }
+
+  export type FighterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "age" | "gender" | "nickname" | "alias" | "nationality" | "nationalityCode" | "stance" | "debut" | "height" | "heightCm" | "heightIn" | "heightFt" | "reach" | "reachCm" | "reachIn" | "wins" | "losses" | "draws" | "totalBouts" | "totalRounds" | "koWins" | "stopped" | "divisionId" | "divisionName" | "divisionWeightLb" | "divisionWeightKg" | "titles", ExtArgs["result"]["fighter"]>
+
+  export type $FighterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Fighter"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      age: number
+      gender: string
+      nickname: string | null
+      alias: string | null
+      nationality: string
+      nationalityCode: string
+      stance: string
+      debut: string
+      height: string
+      heightCm: number
+      heightIn: number
+      heightFt: string
+      reach: string
+      reachCm: number
+      reachIn: number
+      wins: number
+      losses: number
+      draws: number
+      totalBouts: number | null
+      totalRounds: number | null
+      koWins: number | null
+      stopped: number | null
+      divisionId: string
+      divisionName: string
+      divisionWeightLb: number | null
+      divisionWeightKg: number | null
+      titles: string
+    }, ExtArgs["result"]["fighter"]>
+    composites: {}
+  }
+
+  type FighterGetPayload<S extends boolean | null | undefined | FighterDefaultArgs> = $Result.GetResult<Prisma.$FighterPayload, S>
+
+  type FighterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FighterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FighterCountAggregateInputType | true
+    }
+
+  export interface FighterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Fighter'], meta: { name: 'Fighter' } }
+    /**
+     * Find zero or one Fighter that matches the filter.
+     * @param {FighterFindUniqueArgs} args - Arguments to find a Fighter
+     * @example
+     * // Get one Fighter
+     * const fighter = await prisma.fighter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FighterFindUniqueArgs>(args: SelectSubset<T, FighterFindUniqueArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Fighter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FighterFindUniqueOrThrowArgs} args - Arguments to find a Fighter
+     * @example
+     * // Get one Fighter
+     * const fighter = await prisma.fighter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FighterFindUniqueOrThrowArgs>(args: SelectSubset<T, FighterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fighter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterFindFirstArgs} args - Arguments to find a Fighter
+     * @example
+     * // Get one Fighter
+     * const fighter = await prisma.fighter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FighterFindFirstArgs>(args?: SelectSubset<T, FighterFindFirstArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Fighter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterFindFirstOrThrowArgs} args - Arguments to find a Fighter
+     * @example
+     * // Get one Fighter
+     * const fighter = await prisma.fighter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FighterFindFirstOrThrowArgs>(args?: SelectSubset<T, FighterFindFirstOrThrowArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Fighters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Fighters
+     * const fighters = await prisma.fighter.findMany()
+     * 
+     * // Get first 10 Fighters
+     * const fighters = await prisma.fighter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fighterWithIdOnly = await prisma.fighter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FighterFindManyArgs>(args?: SelectSubset<T, FighterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Fighter.
+     * @param {FighterCreateArgs} args - Arguments to create a Fighter.
+     * @example
+     * // Create one Fighter
+     * const Fighter = await prisma.fighter.create({
+     *   data: {
+     *     // ... data to create a Fighter
+     *   }
+     * })
+     * 
+     */
+    create<T extends FighterCreateArgs>(args: SelectSubset<T, FighterCreateArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Fighters.
+     * @param {FighterCreateManyArgs} args - Arguments to create many Fighters.
+     * @example
+     * // Create many Fighters
+     * const fighter = await prisma.fighter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FighterCreateManyArgs>(args?: SelectSubset<T, FighterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Fighters and returns the data saved in the database.
+     * @param {FighterCreateManyAndReturnArgs} args - Arguments to create many Fighters.
+     * @example
+     * // Create many Fighters
+     * const fighter = await prisma.fighter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Fighters and only return the `id`
+     * const fighterWithIdOnly = await prisma.fighter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FighterCreateManyAndReturnArgs>(args?: SelectSubset<T, FighterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Fighter.
+     * @param {FighterDeleteArgs} args - Arguments to delete one Fighter.
+     * @example
+     * // Delete one Fighter
+     * const Fighter = await prisma.fighter.delete({
+     *   where: {
+     *     // ... filter to delete one Fighter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FighterDeleteArgs>(args: SelectSubset<T, FighterDeleteArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Fighter.
+     * @param {FighterUpdateArgs} args - Arguments to update one Fighter.
+     * @example
+     * // Update one Fighter
+     * const fighter = await prisma.fighter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FighterUpdateArgs>(args: SelectSubset<T, FighterUpdateArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Fighters.
+     * @param {FighterDeleteManyArgs} args - Arguments to filter Fighters to delete.
+     * @example
+     * // Delete a few Fighters
+     * const { count } = await prisma.fighter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FighterDeleteManyArgs>(args?: SelectSubset<T, FighterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fighters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Fighters
+     * const fighter = await prisma.fighter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FighterUpdateManyArgs>(args: SelectSubset<T, FighterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Fighters and returns the data updated in the database.
+     * @param {FighterUpdateManyAndReturnArgs} args - Arguments to update many Fighters.
+     * @example
+     * // Update many Fighters
+     * const fighter = await prisma.fighter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Fighters and only return the `id`
+     * const fighterWithIdOnly = await prisma.fighter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FighterUpdateManyAndReturnArgs>(args: SelectSubset<T, FighterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Fighter.
+     * @param {FighterUpsertArgs} args - Arguments to update or create a Fighter.
+     * @example
+     * // Update or create a Fighter
+     * const fighter = await prisma.fighter.upsert({
+     *   create: {
+     *     // ... data to create a Fighter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Fighter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FighterUpsertArgs>(args: SelectSubset<T, FighterUpsertArgs<ExtArgs>>): Prisma__FighterClient<$Result.GetResult<Prisma.$FighterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Fighters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterCountArgs} args - Arguments to filter Fighters to count.
+     * @example
+     * // Count the number of Fighters
+     * const count = await prisma.fighter.count({
+     *   where: {
+     *     // ... the filter for the Fighters we want to count
+     *   }
+     * })
+    **/
+    count<T extends FighterCountArgs>(
+      args?: Subset<T, FighterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FighterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Fighter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FighterAggregateArgs>(args: Subset<T, FighterAggregateArgs>): Prisma.PrismaPromise<GetFighterAggregateType<T>>
+
+    /**
+     * Group by Fighter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FighterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FighterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FighterGroupByArgs['orderBy'] }
+        : { orderBy?: FighterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FighterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFighterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Fighter model
+   */
+  readonly fields: FighterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Fighter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FighterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Fighter model
+   */
+  interface FighterFieldRefs {
+    readonly id: FieldRef<"Fighter", 'String'>
+    readonly name: FieldRef<"Fighter", 'String'>
+    readonly age: FieldRef<"Fighter", 'Int'>
+    readonly gender: FieldRef<"Fighter", 'String'>
+    readonly nickname: FieldRef<"Fighter", 'String'>
+    readonly alias: FieldRef<"Fighter", 'String'>
+    readonly nationality: FieldRef<"Fighter", 'String'>
+    readonly nationalityCode: FieldRef<"Fighter", 'String'>
+    readonly stance: FieldRef<"Fighter", 'String'>
+    readonly debut: FieldRef<"Fighter", 'String'>
+    readonly height: FieldRef<"Fighter", 'String'>
+    readonly heightCm: FieldRef<"Fighter", 'Float'>
+    readonly heightIn: FieldRef<"Fighter", 'Float'>
+    readonly heightFt: FieldRef<"Fighter", 'String'>
+    readonly reach: FieldRef<"Fighter", 'String'>
+    readonly reachCm: FieldRef<"Fighter", 'Float'>
+    readonly reachIn: FieldRef<"Fighter", 'Float'>
+    readonly wins: FieldRef<"Fighter", 'Int'>
+    readonly losses: FieldRef<"Fighter", 'Int'>
+    readonly draws: FieldRef<"Fighter", 'Int'>
+    readonly totalBouts: FieldRef<"Fighter", 'Int'>
+    readonly totalRounds: FieldRef<"Fighter", 'Int'>
+    readonly koWins: FieldRef<"Fighter", 'Int'>
+    readonly stopped: FieldRef<"Fighter", 'Int'>
+    readonly divisionId: FieldRef<"Fighter", 'String'>
+    readonly divisionName: FieldRef<"Fighter", 'String'>
+    readonly divisionWeightLb: FieldRef<"Fighter", 'Float'>
+    readonly divisionWeightKg: FieldRef<"Fighter", 'Float'>
+    readonly titles: FieldRef<"Fighter", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Fighter findUnique
+   */
+  export type FighterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter, which Fighter to fetch.
+     */
+    where: FighterWhereUniqueInput
+  }
+
+  /**
+   * Fighter findUniqueOrThrow
+   */
+  export type FighterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter, which Fighter to fetch.
+     */
+    where: FighterWhereUniqueInput
+  }
+
+  /**
+   * Fighter findFirst
+   */
+  export type FighterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter, which Fighter to fetch.
+     */
+    where?: FighterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fighters to fetch.
+     */
+    orderBy?: FighterOrderByWithRelationInput | FighterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fighters.
+     */
+    cursor?: FighterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fighters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fighters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fighters.
+     */
+    distinct?: FighterScalarFieldEnum | FighterScalarFieldEnum[]
+  }
+
+  /**
+   * Fighter findFirstOrThrow
+   */
+  export type FighterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter, which Fighter to fetch.
+     */
+    where?: FighterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fighters to fetch.
+     */
+    orderBy?: FighterOrderByWithRelationInput | FighterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Fighters.
+     */
+    cursor?: FighterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fighters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fighters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Fighters.
+     */
+    distinct?: FighterScalarFieldEnum | FighterScalarFieldEnum[]
+  }
+
+  /**
+   * Fighter findMany
+   */
+  export type FighterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter, which Fighters to fetch.
+     */
+    where?: FighterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Fighters to fetch.
+     */
+    orderBy?: FighterOrderByWithRelationInput | FighterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Fighters.
+     */
+    cursor?: FighterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Fighters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Fighters.
+     */
+    skip?: number
+    distinct?: FighterScalarFieldEnum | FighterScalarFieldEnum[]
+  }
+
+  /**
+   * Fighter create
+   */
+  export type FighterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Fighter.
+     */
+    data: XOR<FighterCreateInput, FighterUncheckedCreateInput>
+  }
+
+  /**
+   * Fighter createMany
+   */
+  export type FighterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Fighters.
+     */
+    data: FighterCreateManyInput | FighterCreateManyInput[]
+  }
+
+  /**
+   * Fighter createManyAndReturn
+   */
+  export type FighterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * The data used to create many Fighters.
+     */
+    data: FighterCreateManyInput | FighterCreateManyInput[]
+  }
+
+  /**
+   * Fighter update
+   */
+  export type FighterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Fighter.
+     */
+    data: XOR<FighterUpdateInput, FighterUncheckedUpdateInput>
+    /**
+     * Choose, which Fighter to update.
+     */
+    where: FighterWhereUniqueInput
+  }
+
+  /**
+   * Fighter updateMany
+   */
+  export type FighterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Fighters.
+     */
+    data: XOR<FighterUpdateManyMutationInput, FighterUncheckedUpdateManyInput>
+    /**
+     * Filter which Fighters to update
+     */
+    where?: FighterWhereInput
+    /**
+     * Limit how many Fighters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fighter updateManyAndReturn
+   */
+  export type FighterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * The data used to update Fighters.
+     */
+    data: XOR<FighterUpdateManyMutationInput, FighterUncheckedUpdateManyInput>
+    /**
+     * Filter which Fighters to update
+     */
+    where?: FighterWhereInput
+    /**
+     * Limit how many Fighters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fighter upsert
+   */
+  export type FighterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Fighter to update in case it exists.
+     */
+    where: FighterWhereUniqueInput
+    /**
+     * In case the Fighter found by the `where` argument doesn't exist, create a new Fighter with this data.
+     */
+    create: XOR<FighterCreateInput, FighterUncheckedCreateInput>
+    /**
+     * In case the Fighter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FighterUpdateInput, FighterUncheckedUpdateInput>
+  }
+
+  /**
+   * Fighter delete
+   */
+  export type FighterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+    /**
+     * Filter which Fighter to delete.
+     */
+    where: FighterWhereUniqueInput
+  }
+
+  /**
+   * Fighter deleteMany
+   */
+  export type FighterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Fighters to delete
+     */
+    where?: FighterWhereInput
+    /**
+     * Limit how many Fighters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Fighter without action
+   */
+  export type FighterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Fighter
+     */
+    select?: FighterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Fighter
+     */
+    omit?: FighterOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -6764,6 +8246,41 @@ export namespace Prisma {
   };
 
   export type VerificationTokenScalarFieldEnum = (typeof VerificationTokenScalarFieldEnum)[keyof typeof VerificationTokenScalarFieldEnum]
+
+
+  export const FighterScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    age: 'age',
+    gender: 'gender',
+    nickname: 'nickname',
+    alias: 'alias',
+    nationality: 'nationality',
+    nationalityCode: 'nationalityCode',
+    stance: 'stance',
+    debut: 'debut',
+    height: 'height',
+    heightCm: 'heightCm',
+    heightIn: 'heightIn',
+    heightFt: 'heightFt',
+    reach: 'reach',
+    reachCm: 'reachCm',
+    reachIn: 'reachIn',
+    wins: 'wins',
+    losses: 'losses',
+    draws: 'draws',
+    totalBouts: 'totalBouts',
+    totalRounds: 'totalRounds',
+    koWins: 'koWins',
+    stopped: 'stopped',
+    divisionId: 'divisionId',
+    divisionName: 'divisionName',
+    divisionWeightLb: 'divisionWeightLb',
+    divisionWeightKg: 'divisionWeightKg',
+    titles: 'titles'
+  };
+
+  export type FighterScalarFieldEnum = (typeof FighterScalarFieldEnum)[keyof typeof FighterScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -7127,6 +8644,180 @@ export namespace Prisma {
     expires?: DateTimeWithAggregatesFilter<"VerificationToken"> | Date | string
   }
 
+  export type FighterWhereInput = {
+    AND?: FighterWhereInput | FighterWhereInput[]
+    OR?: FighterWhereInput[]
+    NOT?: FighterWhereInput | FighterWhereInput[]
+    id?: StringFilter<"Fighter"> | string
+    name?: StringFilter<"Fighter"> | string
+    age?: IntFilter<"Fighter"> | number
+    gender?: StringFilter<"Fighter"> | string
+    nickname?: StringNullableFilter<"Fighter"> | string | null
+    alias?: StringNullableFilter<"Fighter"> | string | null
+    nationality?: StringFilter<"Fighter"> | string
+    nationalityCode?: StringFilter<"Fighter"> | string
+    stance?: StringFilter<"Fighter"> | string
+    debut?: StringFilter<"Fighter"> | string
+    height?: StringFilter<"Fighter"> | string
+    heightCm?: FloatFilter<"Fighter"> | number
+    heightIn?: FloatFilter<"Fighter"> | number
+    heightFt?: StringFilter<"Fighter"> | string
+    reach?: StringFilter<"Fighter"> | string
+    reachCm?: FloatFilter<"Fighter"> | number
+    reachIn?: FloatFilter<"Fighter"> | number
+    wins?: IntFilter<"Fighter"> | number
+    losses?: IntFilter<"Fighter"> | number
+    draws?: IntFilter<"Fighter"> | number
+    totalBouts?: IntNullableFilter<"Fighter"> | number | null
+    totalRounds?: IntNullableFilter<"Fighter"> | number | null
+    koWins?: IntNullableFilter<"Fighter"> | number | null
+    stopped?: IntNullableFilter<"Fighter"> | number | null
+    divisionId?: StringFilter<"Fighter"> | string
+    divisionName?: StringFilter<"Fighter"> | string
+    divisionWeightLb?: FloatNullableFilter<"Fighter"> | number | null
+    divisionWeightKg?: FloatNullableFilter<"Fighter"> | number | null
+    titles?: StringFilter<"Fighter"> | string
+  }
+
+  export type FighterOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    age?: SortOrder
+    gender?: SortOrder
+    nickname?: SortOrderInput | SortOrder
+    alias?: SortOrderInput | SortOrder
+    nationality?: SortOrder
+    nationalityCode?: SortOrder
+    stance?: SortOrder
+    debut?: SortOrder
+    height?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    heightFt?: SortOrder
+    reach?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrderInput | SortOrder
+    totalRounds?: SortOrderInput | SortOrder
+    koWins?: SortOrderInput | SortOrder
+    stopped?: SortOrderInput | SortOrder
+    divisionId?: SortOrder
+    divisionName?: SortOrder
+    divisionWeightLb?: SortOrderInput | SortOrder
+    divisionWeightKg?: SortOrderInput | SortOrder
+    titles?: SortOrder
+  }
+
+  export type FighterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FighterWhereInput | FighterWhereInput[]
+    OR?: FighterWhereInput[]
+    NOT?: FighterWhereInput | FighterWhereInput[]
+    name?: StringFilter<"Fighter"> | string
+    age?: IntFilter<"Fighter"> | number
+    gender?: StringFilter<"Fighter"> | string
+    nickname?: StringNullableFilter<"Fighter"> | string | null
+    alias?: StringNullableFilter<"Fighter"> | string | null
+    nationality?: StringFilter<"Fighter"> | string
+    nationalityCode?: StringFilter<"Fighter"> | string
+    stance?: StringFilter<"Fighter"> | string
+    debut?: StringFilter<"Fighter"> | string
+    height?: StringFilter<"Fighter"> | string
+    heightCm?: FloatFilter<"Fighter"> | number
+    heightIn?: FloatFilter<"Fighter"> | number
+    heightFt?: StringFilter<"Fighter"> | string
+    reach?: StringFilter<"Fighter"> | string
+    reachCm?: FloatFilter<"Fighter"> | number
+    reachIn?: FloatFilter<"Fighter"> | number
+    wins?: IntFilter<"Fighter"> | number
+    losses?: IntFilter<"Fighter"> | number
+    draws?: IntFilter<"Fighter"> | number
+    totalBouts?: IntNullableFilter<"Fighter"> | number | null
+    totalRounds?: IntNullableFilter<"Fighter"> | number | null
+    koWins?: IntNullableFilter<"Fighter"> | number | null
+    stopped?: IntNullableFilter<"Fighter"> | number | null
+    divisionId?: StringFilter<"Fighter"> | string
+    divisionName?: StringFilter<"Fighter"> | string
+    divisionWeightLb?: FloatNullableFilter<"Fighter"> | number | null
+    divisionWeightKg?: FloatNullableFilter<"Fighter"> | number | null
+    titles?: StringFilter<"Fighter"> | string
+  }, "id">
+
+  export type FighterOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    age?: SortOrder
+    gender?: SortOrder
+    nickname?: SortOrderInput | SortOrder
+    alias?: SortOrderInput | SortOrder
+    nationality?: SortOrder
+    nationalityCode?: SortOrder
+    stance?: SortOrder
+    debut?: SortOrder
+    height?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    heightFt?: SortOrder
+    reach?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrderInput | SortOrder
+    totalRounds?: SortOrderInput | SortOrder
+    koWins?: SortOrderInput | SortOrder
+    stopped?: SortOrderInput | SortOrder
+    divisionId?: SortOrder
+    divisionName?: SortOrder
+    divisionWeightLb?: SortOrderInput | SortOrder
+    divisionWeightKg?: SortOrderInput | SortOrder
+    titles?: SortOrder
+    _count?: FighterCountOrderByAggregateInput
+    _avg?: FighterAvgOrderByAggregateInput
+    _max?: FighterMaxOrderByAggregateInput
+    _min?: FighterMinOrderByAggregateInput
+    _sum?: FighterSumOrderByAggregateInput
+  }
+
+  export type FighterScalarWhereWithAggregatesInput = {
+    AND?: FighterScalarWhereWithAggregatesInput | FighterScalarWhereWithAggregatesInput[]
+    OR?: FighterScalarWhereWithAggregatesInput[]
+    NOT?: FighterScalarWhereWithAggregatesInput | FighterScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Fighter"> | string
+    name?: StringWithAggregatesFilter<"Fighter"> | string
+    age?: IntWithAggregatesFilter<"Fighter"> | number
+    gender?: StringWithAggregatesFilter<"Fighter"> | string
+    nickname?: StringNullableWithAggregatesFilter<"Fighter"> | string | null
+    alias?: StringNullableWithAggregatesFilter<"Fighter"> | string | null
+    nationality?: StringWithAggregatesFilter<"Fighter"> | string
+    nationalityCode?: StringWithAggregatesFilter<"Fighter"> | string
+    stance?: StringWithAggregatesFilter<"Fighter"> | string
+    debut?: StringWithAggregatesFilter<"Fighter"> | string
+    height?: StringWithAggregatesFilter<"Fighter"> | string
+    heightCm?: FloatWithAggregatesFilter<"Fighter"> | number
+    heightIn?: FloatWithAggregatesFilter<"Fighter"> | number
+    heightFt?: StringWithAggregatesFilter<"Fighter"> | string
+    reach?: StringWithAggregatesFilter<"Fighter"> | string
+    reachCm?: FloatWithAggregatesFilter<"Fighter"> | number
+    reachIn?: FloatWithAggregatesFilter<"Fighter"> | number
+    wins?: IntWithAggregatesFilter<"Fighter"> | number
+    losses?: IntWithAggregatesFilter<"Fighter"> | number
+    draws?: IntWithAggregatesFilter<"Fighter"> | number
+    totalBouts?: IntNullableWithAggregatesFilter<"Fighter"> | number | null
+    totalRounds?: IntNullableWithAggregatesFilter<"Fighter"> | number | null
+    koWins?: IntNullableWithAggregatesFilter<"Fighter"> | number | null
+    stopped?: IntNullableWithAggregatesFilter<"Fighter"> | number | null
+    divisionId?: StringWithAggregatesFilter<"Fighter"> | string
+    divisionName?: StringWithAggregatesFilter<"Fighter"> | string
+    divisionWeightLb?: FloatNullableWithAggregatesFilter<"Fighter"> | number | null
+    divisionWeightKg?: FloatNullableWithAggregatesFilter<"Fighter"> | number | null
+    titles?: StringWithAggregatesFilter<"Fighter"> | string
+  }
+
   export type PostCreateInput = {
     name: string
     createdAt?: Date | string
@@ -7446,6 +9137,230 @@ export namespace Prisma {
     identifier?: StringFieldUpdateOperationsInput | string
     token?: StringFieldUpdateOperationsInput | string
     expires?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FighterCreateInput = {
+    id: string
+    name: string
+    age: number
+    gender: string
+    nickname?: string | null
+    alias?: string | null
+    nationality: string
+    nationalityCode: string
+    stance: string
+    debut: string
+    height: string
+    heightCm: number
+    heightIn: number
+    heightFt: string
+    reach: string
+    reachCm: number
+    reachIn: number
+    wins: number
+    losses: number
+    draws: number
+    totalBouts?: number | null
+    totalRounds?: number | null
+    koWins?: number | null
+    stopped?: number | null
+    divisionId: string
+    divisionName: string
+    divisionWeightLb?: number | null
+    divisionWeightKg?: number | null
+    titles?: string
+  }
+
+  export type FighterUncheckedCreateInput = {
+    id: string
+    name: string
+    age: number
+    gender: string
+    nickname?: string | null
+    alias?: string | null
+    nationality: string
+    nationalityCode: string
+    stance: string
+    debut: string
+    height: string
+    heightCm: number
+    heightIn: number
+    heightFt: string
+    reach: string
+    reachCm: number
+    reachIn: number
+    wins: number
+    losses: number
+    draws: number
+    totalBouts?: number | null
+    totalRounds?: number | null
+    koWins?: number | null
+    stopped?: number | null
+    divisionId: string
+    divisionName: string
+    divisionWeightLb?: number | null
+    divisionWeightKg?: number | null
+    titles?: string
+  }
+
+  export type FighterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    age?: IntFieldUpdateOperationsInput | number
+    gender?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    alias?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: StringFieldUpdateOperationsInput | string
+    nationalityCode?: StringFieldUpdateOperationsInput | string
+    stance?: StringFieldUpdateOperationsInput | string
+    debut?: StringFieldUpdateOperationsInput | string
+    height?: StringFieldUpdateOperationsInput | string
+    heightCm?: FloatFieldUpdateOperationsInput | number
+    heightIn?: FloatFieldUpdateOperationsInput | number
+    heightFt?: StringFieldUpdateOperationsInput | string
+    reach?: StringFieldUpdateOperationsInput | string
+    reachCm?: FloatFieldUpdateOperationsInput | number
+    reachIn?: FloatFieldUpdateOperationsInput | number
+    wins?: IntFieldUpdateOperationsInput | number
+    losses?: IntFieldUpdateOperationsInput | number
+    draws?: IntFieldUpdateOperationsInput | number
+    totalBouts?: NullableIntFieldUpdateOperationsInput | number | null
+    totalRounds?: NullableIntFieldUpdateOperationsInput | number | null
+    koWins?: NullableIntFieldUpdateOperationsInput | number | null
+    stopped?: NullableIntFieldUpdateOperationsInput | number | null
+    divisionId?: StringFieldUpdateOperationsInput | string
+    divisionName?: StringFieldUpdateOperationsInput | string
+    divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
+    divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    titles?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FighterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    age?: IntFieldUpdateOperationsInput | number
+    gender?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    alias?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: StringFieldUpdateOperationsInput | string
+    nationalityCode?: StringFieldUpdateOperationsInput | string
+    stance?: StringFieldUpdateOperationsInput | string
+    debut?: StringFieldUpdateOperationsInput | string
+    height?: StringFieldUpdateOperationsInput | string
+    heightCm?: FloatFieldUpdateOperationsInput | number
+    heightIn?: FloatFieldUpdateOperationsInput | number
+    heightFt?: StringFieldUpdateOperationsInput | string
+    reach?: StringFieldUpdateOperationsInput | string
+    reachCm?: FloatFieldUpdateOperationsInput | number
+    reachIn?: FloatFieldUpdateOperationsInput | number
+    wins?: IntFieldUpdateOperationsInput | number
+    losses?: IntFieldUpdateOperationsInput | number
+    draws?: IntFieldUpdateOperationsInput | number
+    totalBouts?: NullableIntFieldUpdateOperationsInput | number | null
+    totalRounds?: NullableIntFieldUpdateOperationsInput | number | null
+    koWins?: NullableIntFieldUpdateOperationsInput | number | null
+    stopped?: NullableIntFieldUpdateOperationsInput | number | null
+    divisionId?: StringFieldUpdateOperationsInput | string
+    divisionName?: StringFieldUpdateOperationsInput | string
+    divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
+    divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    titles?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FighterCreateManyInput = {
+    id: string
+    name: string
+    age: number
+    gender: string
+    nickname?: string | null
+    alias?: string | null
+    nationality: string
+    nationalityCode: string
+    stance: string
+    debut: string
+    height: string
+    heightCm: number
+    heightIn: number
+    heightFt: string
+    reach: string
+    reachCm: number
+    reachIn: number
+    wins: number
+    losses: number
+    draws: number
+    totalBouts?: number | null
+    totalRounds?: number | null
+    koWins?: number | null
+    stopped?: number | null
+    divisionId: string
+    divisionName: string
+    divisionWeightLb?: number | null
+    divisionWeightKg?: number | null
+    titles?: string
+  }
+
+  export type FighterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    age?: IntFieldUpdateOperationsInput | number
+    gender?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    alias?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: StringFieldUpdateOperationsInput | string
+    nationalityCode?: StringFieldUpdateOperationsInput | string
+    stance?: StringFieldUpdateOperationsInput | string
+    debut?: StringFieldUpdateOperationsInput | string
+    height?: StringFieldUpdateOperationsInput | string
+    heightCm?: FloatFieldUpdateOperationsInput | number
+    heightIn?: FloatFieldUpdateOperationsInput | number
+    heightFt?: StringFieldUpdateOperationsInput | string
+    reach?: StringFieldUpdateOperationsInput | string
+    reachCm?: FloatFieldUpdateOperationsInput | number
+    reachIn?: FloatFieldUpdateOperationsInput | number
+    wins?: IntFieldUpdateOperationsInput | number
+    losses?: IntFieldUpdateOperationsInput | number
+    draws?: IntFieldUpdateOperationsInput | number
+    totalBouts?: NullableIntFieldUpdateOperationsInput | number | null
+    totalRounds?: NullableIntFieldUpdateOperationsInput | number | null
+    koWins?: NullableIntFieldUpdateOperationsInput | number | null
+    stopped?: NullableIntFieldUpdateOperationsInput | number | null
+    divisionId?: StringFieldUpdateOperationsInput | string
+    divisionName?: StringFieldUpdateOperationsInput | string
+    divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
+    divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    titles?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type FighterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    age?: IntFieldUpdateOperationsInput | number
+    gender?: StringFieldUpdateOperationsInput | string
+    nickname?: NullableStringFieldUpdateOperationsInput | string | null
+    alias?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: StringFieldUpdateOperationsInput | string
+    nationalityCode?: StringFieldUpdateOperationsInput | string
+    stance?: StringFieldUpdateOperationsInput | string
+    debut?: StringFieldUpdateOperationsInput | string
+    height?: StringFieldUpdateOperationsInput | string
+    heightCm?: FloatFieldUpdateOperationsInput | number
+    heightIn?: FloatFieldUpdateOperationsInput | number
+    heightFt?: StringFieldUpdateOperationsInput | string
+    reach?: StringFieldUpdateOperationsInput | string
+    reachCm?: FloatFieldUpdateOperationsInput | number
+    reachIn?: FloatFieldUpdateOperationsInput | number
+    wins?: IntFieldUpdateOperationsInput | number
+    losses?: IntFieldUpdateOperationsInput | number
+    draws?: IntFieldUpdateOperationsInput | number
+    totalBouts?: NullableIntFieldUpdateOperationsInput | number | null
+    totalRounds?: NullableIntFieldUpdateOperationsInput | number | null
+    koWins?: NullableIntFieldUpdateOperationsInput | number | null
+    stopped?: NullableIntFieldUpdateOperationsInput | number | null
+    divisionId?: StringFieldUpdateOperationsInput | string
+    divisionName?: StringFieldUpdateOperationsInput | string
+    divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
+    divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    titles?: StringFieldUpdateOperationsInput | string
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -7817,6 +9732,190 @@ export namespace Prisma {
     expires?: SortOrder
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type FighterCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    age?: SortOrder
+    gender?: SortOrder
+    nickname?: SortOrder
+    alias?: SortOrder
+    nationality?: SortOrder
+    nationalityCode?: SortOrder
+    stance?: SortOrder
+    debut?: SortOrder
+    height?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    heightFt?: SortOrder
+    reach?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrder
+    totalRounds?: SortOrder
+    koWins?: SortOrder
+    stopped?: SortOrder
+    divisionId?: SortOrder
+    divisionName?: SortOrder
+    divisionWeightLb?: SortOrder
+    divisionWeightKg?: SortOrder
+    titles?: SortOrder
+  }
+
+  export type FighterAvgOrderByAggregateInput = {
+    age?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrder
+    totalRounds?: SortOrder
+    koWins?: SortOrder
+    stopped?: SortOrder
+    divisionWeightLb?: SortOrder
+    divisionWeightKg?: SortOrder
+  }
+
+  export type FighterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    age?: SortOrder
+    gender?: SortOrder
+    nickname?: SortOrder
+    alias?: SortOrder
+    nationality?: SortOrder
+    nationalityCode?: SortOrder
+    stance?: SortOrder
+    debut?: SortOrder
+    height?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    heightFt?: SortOrder
+    reach?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrder
+    totalRounds?: SortOrder
+    koWins?: SortOrder
+    stopped?: SortOrder
+    divisionId?: SortOrder
+    divisionName?: SortOrder
+    divisionWeightLb?: SortOrder
+    divisionWeightKg?: SortOrder
+    titles?: SortOrder
+  }
+
+  export type FighterMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    age?: SortOrder
+    gender?: SortOrder
+    nickname?: SortOrder
+    alias?: SortOrder
+    nationality?: SortOrder
+    nationalityCode?: SortOrder
+    stance?: SortOrder
+    debut?: SortOrder
+    height?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    heightFt?: SortOrder
+    reach?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrder
+    totalRounds?: SortOrder
+    koWins?: SortOrder
+    stopped?: SortOrder
+    divisionId?: SortOrder
+    divisionName?: SortOrder
+    divisionWeightLb?: SortOrder
+    divisionWeightKg?: SortOrder
+    titles?: SortOrder
+  }
+
+  export type FighterSumOrderByAggregateInput = {
+    age?: SortOrder
+    heightCm?: SortOrder
+    heightIn?: SortOrder
+    reachCm?: SortOrder
+    reachIn?: SortOrder
+    wins?: SortOrder
+    losses?: SortOrder
+    draws?: SortOrder
+    totalBouts?: SortOrder
+    totalRounds?: SortOrder
+    koWins?: SortOrder
+    stopped?: SortOrder
+    divisionWeightLb?: SortOrder
+    divisionWeightKg?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
   export type UserCreateNestedOneWithoutPostsInput = {
     create?: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
     connectOrCreate?: UserCreateOrConnectWithoutPostsInput
@@ -8017,6 +10116,22 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -8203,6 +10318,38 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[]
+    notIn?: number[]
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutPostsInput = {
