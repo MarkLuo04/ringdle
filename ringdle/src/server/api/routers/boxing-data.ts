@@ -69,7 +69,7 @@ export const boxingRouter = createTRPCRouter({
       return toBoxingDataFighter(random);
     }),
   
-  // Search for a fighter by name
+  // Search for a fighter by name 
   searchFighters: publicProcedure
     .input(z.object({ query: z.string().min(1) }))
     .query(async ({ input }) => {
@@ -78,5 +78,16 @@ export const boxingRouter = createTRPCRouter({
         take: 10,
       });
       return fighters.map(toBoxingDataFighter);
+    }),
+
+  // Lightweight name suggestions
+  suggestFighters: publicProcedure
+    .input(z.object({ query: z.string().min(1) }))
+    .query(async ({ input }) => {
+      return db.fighter.findMany({
+        where: { name: { contains: input.query } },
+        select: { id: true, name: true, divisionName: true },
+        take: 10,
+      });
     }),
 });

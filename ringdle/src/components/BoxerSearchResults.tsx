@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { skipToken } from "@tanstack/react-query";
 import { api } from "~/trpc/react";
 import { useDebounce } from "~/hooks/useDebounce";
 import { Field, FieldLabel } from "~/components/ui/field";
@@ -24,20 +25,38 @@ export function BoxerSearchResults() {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [addedFighters, setAddedFighters] = useState<BoxingDataFighter[]>([]);
+  const [pendingId, setPendingId] = useState<string | null>(null);
 
   const debouncedInput = useDebounce(inputValue, 150);
 
-  const { data: suggestions } = api.boxing.searchFighters.useQuery(
+  // Lightweight query for dropdown suggestions
+  const { data: suggestions } = api.boxing.suggestFighters.useQuery(
     { query: debouncedInput },
     { enabled: debouncedInput.length >= 2 }
   );
 
-  function handleSelect(fighter: BoxingDataFighter) {
-    if (!addedFighters.some((f) => f.id === fighter.id)) {
-      setAddedFighters((prev) => [...prev, fighter]);
-    }
+  // Full fetch triggered only when a suggestion is clicked
+  const { data: fetchedFighter } = api.boxing.getFighterById.useQuery(
+    pendingId !== null ? { id: pendingId } : skipToken
+  );
+
+  useEffect(() => {
+    if (!fetchedFighter) return;
+    setAddedFighters((prev) =>
+      prev.some((f) => f.id === fetchedFighter.id) ? prev : [...prev, fetchedFighter]
+    );
+    setPendingId(null);
     setInputValue("");
     setShowSuggestions(false);
+  }, [fetchedFighter]);
+
+  function handleSelect(id: string) {
+    if (!addedFighters.some((f) => f.id === id)) {
+      setPendingId(id);
+    } else {
+      setInputValue("");
+      setShowSuggestions(false);
+    }
   }
 
   return (
@@ -62,17 +81,17 @@ export function BoxerSearchResults() {
           {/* Suggestions dropdown */}
           {showSuggestions && suggestions && suggestions.length > 0 && (
             <ul className="absolute z-10 w-full mt-1 rounded-md border bg-popover shadow-md">
-              {suggestions.map((fighter) => (
-                <li key={fighter.id}>
+              {suggestions.map((s) => (
+                <li key={s.id}>
                   <button
                     type="button"
                     className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors"
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={() => handleSelect(fighter)}
+                    onClick={() => handleSelect(s.id)}
                   >
-                    {fighter.name}
+                    {s.name}
                     <span className="ml-2 text-muted-foreground text-xs">
-                      {fighter.division.name}
+                      {s.divisionName}
                     </span>
                   </button>
                 </li>
