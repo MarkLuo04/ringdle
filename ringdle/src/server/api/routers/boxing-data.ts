@@ -62,10 +62,21 @@ export const boxingRouter = createTRPCRouter({
       const fighters = await db.fighter.findMany();
 
       if (fighters.length === 0) {
-        throw new Error("No fighters in database — run npm run db:seed first");
+        throw new Error("No fighters in database");
       }
 
       const random = fighters[Math.floor(Math.random() * fighters.length)]!;
       return toBoxingDataFighter(random);
+    }),
+  
+  // Search for a fighter by name
+  searchFighters: publicProcedure
+    .input(z.object({ query: z.string().min(1) }))
+    .query(async ({ input }) => {
+      const fighters = await db.fighter.findMany({
+        where: { name: { contains: input.query} },
+        take: 10,
+      });
+      return fighters.map(toBoxingDataFighter);
     }),
 });
