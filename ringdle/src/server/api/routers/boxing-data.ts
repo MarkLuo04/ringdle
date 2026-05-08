@@ -19,7 +19,7 @@ function toBoxingDataFighter(f: Fighter): BoxingDataFighter {
     height: f.height,
     height_cm: f.heightCm,
     height_in: f.heightIn,
-    height_ft: f.heightFt,
+    height_ft: f.heightFt.replace(/'\s+/, "'"),
     reach: f.reach,
     reach_cm: f.reachCm,
     reach_in: f.reachIn,

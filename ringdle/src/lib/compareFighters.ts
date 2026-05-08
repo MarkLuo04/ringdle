@@ -12,6 +12,28 @@ export type GuessResult = Record<
   CellResult
 >;
 
+// Converts a height_ft string to total inches
+function toTotalInches(ft: string): number | null {
+  const [feetPart, inchesPart] = ft.split("'");
+  if (!feetPart || !inchesPart) return null;
+  const feet = parseInt(feetPart, 10);
+  const inches = parseInt(inchesPart, 10);
+  if (isNaN(feet) || isNaN(inches)) return null;
+  return feet * 12 + inches;
+}
+
+// Compares height strings
+function heightCell(guessFt: string, targetFt: string): CellResult {
+  if (guessFt === targetFt) return { status: "correct" };
+  const gIn = toTotalInches(guessFt);
+  const tIn = toTotalInches(targetFt);
+  if (gIn === null || tIn === null) return { status: "wrong" };
+  const direction: CellResult["direction"] = tIn > gIn ? "higher" : "lower";
+  // Close if within 2 total inches
+  if (Math.abs(gIn - tIn) <= 2) return { status: "close", direction };
+  return { status: "wrong", direction };
+}
+
 function numericCell(guessVal: number, targetVal: number, closeThreshold: number): CellResult {
   if (guessVal === targetVal) return { status: "correct" };
   const direction = targetVal > guessVal ? "higher" : "lower";
@@ -36,8 +58,7 @@ export function compareFighters(guess: BoxingDataFighter, target: BoxingDataFigh
     nationality: { status: guess.nationality === target.nationality ? "correct" : "wrong" },
     division:    divisionResult(),
     stance:      { status: guess.stance === target.stance ? "correct" : "wrong" },
-    // Round to nearest inch before comparing 
-    height: numericCell(Math.round(guess.height_in), Math.round(target.height_in), 2),
+    height: heightCell(guess.height_ft, target.height_ft),
     // Age
     age:         numericCell(guess.age, target.age, 3),
     // wins/losses/draws
