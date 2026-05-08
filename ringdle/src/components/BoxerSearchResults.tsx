@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { api } from "~/trpc/react";
+import { useDebounce } from "~/hooks/useDebounce";
 import { Field, FieldLabel } from "~/components/ui/field";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "~/components/ui/table";
+import type { BoxingDataFighter } from "~/server/api/routers/types/boxing-data.types";
 
 const COLUMNS = [
   { label: "Name",        key: "name"        },
@@ -21,80 +22,94 @@ const COLUMNS = [
 
 export function BoxerSearchResults() {
   const [inputValue, setInputValue] = useState("");
-  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [addedFighters, setAddedFighters] = useState<BoxingDataFighter[]>([]);
 
-  const { data: results, isFetching } = api.boxing.searchFighters.useQuery(
-    { query: submittedQuery },
-    { enabled: submittedQuery.length > 0 }
+  const debouncedInput = useDebounce(inputValue, 150);
+
+  const { data: suggestions } = api.boxing.searchFighters.useQuery(
+    { query: debouncedInput },
+    { enabled: debouncedInput.length >= 2 }
   );
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const trimmed = inputValue.trim();
-    if (trimmed) setSubmittedQuery(trimmed);
+  function handleSelect(fighter: BoxingDataFighter) {
+    if (!addedFighters.some((f) => f.id === fighter.id)) {
+      setAddedFighters((prev) => [...prev, fighter]);
+    }
+    setInputValue("");
+    setShowSuggestions(false);
   }
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl">
-      {/* Search bar */}
-      <form onSubmit={handleSubmit}>
-        <Field>
-          <FieldLabel>Search for a boxer</FieldLabel>
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              placeholder="Enter a boxer's name..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="flex-1"
-            />
-            <Button type="submit">Search</Button>
-          </div>
-        </Field>
-      </form>
+      {/* Search bar with suggestion dropdown */}
+      <Field>
+        <FieldLabel>Search for a boxer</FieldLabel>
+        <div className="relative">
+          <Input
+            type="text"
+            placeholder="Enter a boxer's name..."
+            value={inputValue}
+            onChange={(e) => {
+              setInputValue(e.target.value);
+              setShowSuggestions(true);
+            }}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            onFocus={() => { if (inputValue.length >= 2) setShowSuggestions(true); }}
+            className="w-full"
+          />
 
-      {/* Search results */}
-      {submittedQuery && (
-        <div>
-          {/* Loading state */}
-          {isFetching && (
-            <p className="text-sm text-muted-foreground">Searching...</p>
-          )}
-          {!isFetching && results?.length === 0 && (
-            <p className="text-sm text-muted-foreground">
-              No fighters found for &quot;{submittedQuery}&quot;
-            </p>
-          )}
-          {/* Results table */}
-          {!isFetching && results && results.length > 0 && (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {COLUMNS.map((col) => (
-                    <TableHead key={col.key} className="text-center">
-                      {col.label}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {results.map((fighter) => (
-                  <TableRow key={fighter.id}>
-                    <TableCell className="font-medium text-center">{fighter.name}</TableCell>
-                    <TableCell className="text-center">{fighter.nationality}</TableCell>
-                    <TableCell className="text-center">{fighter.division.name}</TableCell>
-                    <TableCell className="text-center">{fighter.stance}</TableCell>
-                    <TableCell className="text-center">{fighter.height_ft}</TableCell>
-                    <TableCell className="text-center">{fighter.age}</TableCell>
-                    <TableCell className="text-center">{fighter.stats.wins}</TableCell>
-                    <TableCell className="text-center">{fighter.stats.losses}</TableCell>
-                    <TableCell className="text-center">{fighter.stats.draws}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          {/* Suggestions dropdown */}
+          {showSuggestions && suggestions && suggestions.length > 0 && (
+            <ul className="absolute z-10 w-full mt-1 rounded-md border bg-popover shadow-md">
+              {suggestions.map((fighter) => (
+                <li key={fighter.id}>
+                  <button
+                    type="button"
+                    className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => handleSelect(fighter)}
+                  >
+                    {fighter.name}
+                    <span className="ml-2 text-muted-foreground text-xs">
+                      {fighter.division.name}
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
+      </Field>
+
+      {/* Results table */}
+      {addedFighters.length > 0 && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {COLUMNS.map((col) => (
+                <TableHead key={col.key} className="text-center">
+                  {col.label}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {addedFighters.map((fighter) => (
+              <TableRow key={fighter.id}>
+                <TableCell className="font-medium text-center">{fighter.name}</TableCell>
+                <TableCell className="text-center">{fighter.nationality}</TableCell>
+                <TableCell className="text-center">{fighter.division.name}</TableCell>
+                <TableCell className="text-center">{fighter.stance}</TableCell>
+                <TableCell className="text-center">{fighter.height_ft}</TableCell>
+                <TableCell className="text-center">{fighter.age}</TableCell>
+                <TableCell className="text-center">{fighter.stats.wins}</TableCell>
+                <TableCell className="text-center">{fighter.stats.losses}</TableCell>
+                <TableCell className="text-center">{fighter.stats.draws}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
     </div>
   );

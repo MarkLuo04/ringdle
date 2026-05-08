@@ -11,7 +11,7 @@ export default async function Home() {
         <h1>Ringdle</h1>
       </header>
 
-      {/* search bar */}
+      {/* search bar and results table*/}
       <BoxerSearchResults />
     </div>
   );
