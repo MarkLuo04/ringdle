@@ -1,0 +1,91 @@
+import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "~/components/ui/table";
+import type { BoxingDataFighter } from "~/server/api/routers/types/boxing-data.types";
+import type { GuessResult, CellResult } from "~/lib/compareFighters";
+
+export type GuessEntry = { fighter: BoxingDataFighter; result: GuessResult };
+
+const COLUMNS = [
+  { label: "Name",        key: "name"        },
+  { label: "Nationality", key: "nationality"  },
+  { label: "Division",    key: "division"     },
+  { label: "Stance",      key: "stance"       },
+  { label: "Height",      key: "height"       },
+  { label: "Age",         key: "age"          },
+  { label: "Debut",       key: "debut"        },
+  { label: "W",           key: "wins"         },
+  { label: "L",           key: "losses"       },
+] as const;
+
+type ColumnKey = (typeof COLUMNS)[number]["key"];
+
+// Determine background color based on cell result status
+function cellBg(status: CellResult["status"]): string {
+  if (status === "correct") return "bg-green-600 text-white rounded";
+  if (status === "close")   return "bg-amber-500 text-white rounded";
+  return "";
+}
+
+// Determine direction arrow based on cell result status
+function directionArrow(cell: CellResult): string {
+  if (cell.status === "correct" || !cell.direction) return "";
+  return cell.direction === "higher" ? " ↑" : " ↓";
+}
+
+// Get cell value based on fighter and column key
+function getCellValue(fighter: BoxingDataFighter, key: ColumnKey): string {
+  switch (key) {
+    case "name":        return fighter.name;
+    case "nationality": return fighter.nationality;
+    case "division":    return fighter.division.name;
+    case "stance":      return fighter.stance;
+    case "height":      return fighter.height_ft;
+    case "age":         return String(fighter.age);
+    case "debut":       return fighter.debut;
+    case "wins":        return String(fighter.stats.wins);
+    case "losses":      return String(fighter.stats.losses);
+  }
+}
+
+interface BoxerGuessTableProps {
+  guessedFighters: GuessEntry[];
+}
+
+export function BoxerGuessTable({ guessedFighters }: BoxerGuessTableProps) {
+  if (guessedFighters.length === 0) return null;
+
+  // Render guess table
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {COLUMNS.map((col) => (
+            <TableHead key={col.key} className="text-center">
+              {col.label}
+            </TableHead>
+          ))}
+        </TableRow>
+      </TableHeader>
+      {/* Table body */}
+      <TableBody>
+        {guessedFighters.map(({ fighter, result }) => (
+          <TableRow key={fighter.id}>
+            {/* Table cells */}
+            {COLUMNS.map((col) => {
+              const cell = result[col.key];
+              const value = getCellValue(fighter, col.key);
+              const isNumeric = ["height", "age", "wins", "losses", "draws"].includes(col.key);
+              return (
+                <TableCell key={col.key} className="text-center">
+                  <span className={`inline-block px-2 py-1 ${cellBg(cell.status)}`}>
+                    {value}
+                    {isNumeric && directionArrow(cell)}
+                  </span>
+                </TableCell>
+              );
+            })}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}

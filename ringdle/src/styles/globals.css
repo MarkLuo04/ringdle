@@ -54,7 +54,7 @@
 
 :root {
   /* Background image */
-  --bg-image: url('../../public/boxing_ring.jpg');
+  --bg-image: url('../../public/images/boxing_ring.jpg');
 
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

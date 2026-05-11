@@ -8,7 +8,7 @@ export type CellResult = {
 };
 
 export type GuessResult = Record<
-  "name" | "nationality" | "division" | "stance" | "height" | "age" | "wins" | "losses" | "draws",
+  "name" | "nationality" | "division" | "stance" | "height" | "age" | "debut" | "wins" | "losses",
   CellResult
 >;
 
@@ -58,12 +58,10 @@ export function compareFighters(guess: BoxingDataFighter, target: BoxingDataFigh
     nationality: { status: guess.nationality === target.nationality ? "correct" : "wrong" },
     division:    divisionResult(),
     stance:      { status: guess.stance === target.stance ? "correct" : "wrong" },
-    height: heightCell(guess.height_ft, target.height_ft),
-    // Age
+    height:      heightCell(guess.height_ft, target.height_ft),
     age:         numericCell(guess.age, target.age, 3),
-    // wins/losses/draws
+    debut:       numericCell(parseInt(guess.debut, 10), parseInt(target.debut, 10), 3), 
     wins:        numericCell(guess.stats.wins, target.stats.wins, 5),
     losses:      numericCell(guess.stats.losses, target.stats.losses, 3),
-    draws:       numericCell(guess.stats.draws, target.stats.draws, 1),
   };
 }
