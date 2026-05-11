@@ -19,9 +19,9 @@ const COLUMNS = [
   { label: "Stance",      key: "stance"       },
   { label: "Height",      key: "height"       },
   { label: "Age",         key: "age"          },
+  { label: "Debut",       key: "debut"        },
   { label: "W",           key: "wins"         },
   { label: "L",           key: "losses"       },
-  { label: "D",           key: "draws"        },
 ] as const;
 
 type ColumnKey = (typeof COLUMNS)[number]["key"];
@@ -29,7 +29,7 @@ type ColumnKey = (typeof COLUMNS)[number]["key"];
 // Cell background colour
 function cellBg(status: CellResult["status"]): string {
   if (status === "correct") return "bg-green-600 text-white rounded";
-  if (status === "close")   return "bg-yellow-400 text-black rounded";
+  if (status === "close")   return "bg-amber-500 text-white rounded";
   return "";
 }
 
@@ -47,9 +47,9 @@ function getCellValue(fighter: BoxingDataFighter, key: ColumnKey): string {
     case "stance":      return fighter.stance;
     case "height":      return fighter.height_ft;
     case "age":         return String(fighter.age);
+    case "debut":       return fighter.debut;
     case "wins":        return String(fighter.stats.wins);
     case "losses":      return String(fighter.stats.losses);
-    case "draws":       return String(fighter.stats.draws);
   }
 }
 
