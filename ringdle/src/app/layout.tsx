@@ -1,12 +1,10 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import { Geist, Figtree } from "next/font/google";
+import { Geist, Archivo_Black, Space_Grotesk } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { cn } from "@/lib/utils";
-
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Ringdle",
@@ -19,11 +17,25 @@ const geist = Geist({
   variable: "--font-geist-sans",
 });
 
+const archivoBlack = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-head",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-sans",
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-      <html lang="en" className={cn(geist.variable, "font-sans", figtree.variable, "dark")}>
+      <html lang="en" className={cn(geist.variable, archivoBlack.variable, spaceGrotesk.variable, "font-sans", "dark")}>
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>

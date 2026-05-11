@@ -8,8 +8,8 @@ export default async function Home() {
     <div className="flex flex-col gap-16 justify-center items-center mt-16">  
       {/* Header */}
       <header className="text-center">
-        <h1 className="text-5xl font-bold tracking-tight text-primary">Ringdle</h1>
-        <p className="mt-2 text-sm text-muted-foreground tracking-widest uppercase">Guess the boxer</p>
+        <h1 className="text-7xl font-extrabold tracking-tight text-primary">Ringdle</h1>
+        <p className="mt-2 text-lg text-muted-foreground tracking-widest uppercase">Guess the boxer</p>
       </header>
 
       {/* search bar and results table*/}

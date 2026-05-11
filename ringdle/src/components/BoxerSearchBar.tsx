@@ -4,7 +4,7 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { useDebounce } from "~/hooks/useDebounce";
 import { Field, FieldLabel } from "~/components/ui/field";
-import { Input } from "~/components/ui/input";
+import { Input } from "@/components/retroui/Input";
 
 interface BoxerSearchBarProps {
   onSelect: (id: string) => void;

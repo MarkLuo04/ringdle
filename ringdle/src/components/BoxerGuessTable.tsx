@@ -1,4 +1,4 @@
-import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from "~/components/ui/table";
+import { Table } from "~/components/retroui/Table";
 import type { BoxingDataFighter } from "~/server/api/routers/types/boxing-data.types";
 import type { GuessResult, CellResult } from "~/lib/compareFighters";
 
@@ -18,20 +18,17 @@ const COLUMNS = [
 
 type ColumnKey = (typeof COLUMNS)[number]["key"];
 
-// Determine background color based on cell result status
 function cellBg(status: CellResult["status"]): string {
   if (status === "correct") return "bg-green-600 text-white rounded";
   if (status === "close")   return "bg-amber-500 text-white rounded";
   return "";
 }
 
-// Determine direction arrow based on cell result status
 function directionArrow(cell: CellResult): string {
   if (cell.status === "correct" || !cell.direction) return "";
   return cell.direction === "higher" ? " ↑" : " ↓";
 }
 
-// Get cell value based on fighter and column key
 function getCellValue(fighter: BoxingDataFighter, key: ColumnKey): string {
   switch (key) {
     case "name":        return fighter.name;
@@ -53,39 +50,36 @@ interface BoxerGuessTableProps {
 export function BoxerGuessTable({ guessedFighters }: BoxerGuessTableProps) {
   if (guessedFighters.length === 0) return null;
 
-  // Render guess table
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
+      <Table.Header>
+        <Table.Row>
           {COLUMNS.map((col) => (
-            <TableHead key={col.key} className="text-center">
+            <Table.Head key={col.key} className="text-center">
               {col.label}
-            </TableHead>
+            </Table.Head>
           ))}
-        </TableRow>
-      </TableHeader>
-      {/* Table body */}
-      <TableBody>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {guessedFighters.map(({ fighter, result }) => (
-          <TableRow key={fighter.id}>
-            {/* Table cells */}
+          <Table.Row key={fighter.id}>
             {COLUMNS.map((col) => {
               const cell = result[col.key];
               const value = getCellValue(fighter, col.key);
               const isNumeric = ["height", "age", "wins", "losses", "draws"].includes(col.key);
               return (
-                <TableCell key={col.key} className="text-center">
+                <Table.Cell key={col.key} className="text-center">
                   <span className={`inline-block px-2 py-1 ${cellBg(cell.status)}`}>
                     {value}
                     {isNumeric && directionArrow(cell)}
                   </span>
-                </TableCell>
+                </Table.Cell>
               );
             })}
-          </TableRow>
+          </Table.Row>
         ))}
-      </TableBody>
+      </Table.Body>
     </Table>
   );
 }
