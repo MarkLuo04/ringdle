@@ -6,23 +6,51 @@ import { api } from "~/trpc/react";
 import { compareFighters } from "~/lib/compareFighters";
 import { BoxerSearchBar } from "~/components/BoxerSearchBar";
 import { BoxerGuessTable, type GuessEntry } from "~/components/BoxerGuessTable";
+import { useLocalStorage } from "~/hooks/useLocalStorage";
+import { Button } from "~/components/retroui/Button";
 
 const MAX_GUESSES = 8;
 
 export function BoxerSearchResults() {
-  const [guessedFighters, setGuessedFighters] = useState<GuessEntry[]>([]);
-  const [pendingId, setPendingId]             = useState<string | null>(null);
-  const [gameWon, setGameWon]                 = useState(false);
-  const [gameLost, setGameLost]               = useState(false);
-  const [searchKey, setSearchKey]             = useState(0);
+  const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>("ringdle-guesses", []);
+  const [gameWon, setGameWon]                 = useLocalStorage<boolean>("ringdle-won", false);
+  const [gameLost, setGameLost]               = useLocalStorage<boolean>("ringdle-lost", false);
+  const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>("ringdle-target-id", null);
+
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [searchKey, setSearchKey] = useState(0);
+
+  const utils = api.useUtils();
 
   // staleTime: Infinity prevents any refetch that would randomize the target midgame
-  const { data: targetFighter } = api.boxing.getRandomFighter.useQuery(undefined, {
+  // enabled: false when a game is already in progress (targetFighterId stored)
+  const { data: randomFighter } = api.boxing.getRandomFighter.useQuery(undefined, {
+    enabled: targetFighterId === null,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
   });
+
+  // Fetch the stored target fighter by ID when returning to an existing game
+  const { data: storedFighter } = api.boxing.getFighterById.useQuery(
+    targetFighterId !== null ? { id: targetFighterId } : skipToken,
+    {
+      staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+    }
+  );
+
+  const targetFighter = targetFighterId !== null ? storedFighter : randomFighter;
+
+  // Persist the random fighter's ID the first time it resolves
+  useEffect(() => {
+    if (randomFighter && targetFighterId === null) {
+      setTargetFighterId(randomFighter.id);
+    }
+  }, [randomFighter]);
 
   // Log target fighter for debugging
   useEffect(() => {
@@ -72,6 +100,18 @@ export function BoxerSearchResults() {
     }
   }
 
+  // Reset game state
+  function handleNewGame() {
+    setGuessedFighters([]);
+    setGameWon(false);
+    setGameLost(false);
+    setTargetFighterId(null);
+    setPendingId(null);
+    setSearchKey((k) => k + 1);
+    // Clear cached random fighter so re-enabling the query fetches a new one
+    void utils.boxing.getRandomFighter.reset();
+  }
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl">
       {/* Win banner */}
@@ -81,6 +121,9 @@ export function BoxerSearchResults() {
             You got it! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
+          <Button variant="outline" size="sm" onClick={handleNewGame} className="mt-3">
+            New Game
+          </Button>
         </div>
       )}
 
@@ -91,6 +134,9 @@ export function BoxerSearchResults() {
             Out of guesses! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
+          <Button variant="outline" size="sm" onClick={handleNewGame} className="mt-3">
+            New Game
+          </Button>
         </div>
       )}
 
