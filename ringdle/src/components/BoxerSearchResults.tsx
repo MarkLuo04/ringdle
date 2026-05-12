@@ -8,6 +8,7 @@ import { BoxerSearchBar } from "~/components/BoxerSearchBar";
 import { BoxerGuessTable, type GuessEntry } from "~/components/BoxerGuessTable";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { Button } from "~/components/retroui/Button";
+import { HelpModal } from "~/components/HelpModal";
 
 const MAX_GUESSES = 8;
 
@@ -19,6 +20,7 @@ export function BoxerSearchResults() {
 
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [searchKey, setSearchKey] = useState(0);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const utils = api.useUtils();
 
@@ -114,6 +116,20 @@ export function BoxerSearchResults() {
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl">
+      <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
+
+      {/* Help button */}
+      <div className="flex justify-end">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setHelpOpen(true)}
+          aria-label="How to play"
+        >
+          ? Help
+        </Button>
+      </div>
+
       {/* Win banner */}
       {gameWon && (
         <div className="rounded-lg border border-green-500 bg-green-50 px-6 py-4 text-center dark:bg-green-950">

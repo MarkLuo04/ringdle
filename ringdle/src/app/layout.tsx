@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Ringdle",
   description: "Guess the boxer!",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/ringdle.png" }],
 };
 
 const geist = Geist({
