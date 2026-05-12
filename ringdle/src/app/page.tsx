@@ -2,8 +2,6 @@ import { api } from "~/trpc/server";
 import { BoxerSearchResults } from "@/components/BoxerSearchResults";
 
 export default async function Home() {
-  const fighter = await api.boxing.getRandomFighter();
-
   return (
     <div className="flex flex-col gap-8 md:gap-16 justify-center items-center mt-8 md:mt-16 w-full px-4 sm:px-6">
       {/* Header */}

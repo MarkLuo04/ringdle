@@ -30,7 +30,7 @@ interface TextProps
 
 export const Text = (props: TextProps) => {
   const { className, as, ...otherProps } = props;
-  const Tag: ElementType = as || "p";
+  const Tag: ElementType = as ?? "p";
 
   return (
     <Tag className={cn(textVariants({ as }), className)} {...otherProps} />

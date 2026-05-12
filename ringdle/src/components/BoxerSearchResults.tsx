@@ -50,6 +50,7 @@ export function BoxerSearchResults() {
   const targetFighter = targetFighterId !== null ? storedFighter : randomFighter;
 
   // Persist the random fighter's ID the first time it resolves
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (randomFighter && targetFighterId === null) {
       setTargetFighterId(randomFighter.id);
@@ -68,6 +69,7 @@ export function BoxerSearchResults() {
   );
 
   // Handle fetched fighter from search bar
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!fetchedFighter || !targetFighter) return;
 
