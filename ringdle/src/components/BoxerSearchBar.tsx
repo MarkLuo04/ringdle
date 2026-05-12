@@ -9,9 +9,10 @@ import { Input } from "@/components/retroui/Input";
 interface BoxerSearchBarProps {
   onSelect: (id: string) => void;
   disabled?: boolean;
+  rightLabel?: React.ReactNode;
 }
 
-export function BoxerSearchBar({ onSelect, disabled = false }: BoxerSearchBarProps) {
+export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: BoxerSearchBarProps) {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -32,7 +33,10 @@ export function BoxerSearchBar({ onSelect, disabled = false }: BoxerSearchBarPro
   // Render search bar
   return (
     <Field>
-      <FieldLabel>Search for a boxer</FieldLabel>
+      <div className="flex items-center justify-between">
+        <FieldLabel>Search for a boxer</FieldLabel>
+        {rightLabel && <span className="text-sm text-muted-foreground">{rightLabel}</span>}
+      </div>
       <div className="relative">
         <Input
           type="text"

@@ -85,7 +85,7 @@
   --secondary-foreground: #1a0a00;
   --accent: #F5C518;
   --accent-foreground: #1a0a00;
-  --destructive: #9B0020;
+  --destructive: #9B0020; 
   --destructive-foreground: #FFFFFF;
   --ring: #C8102E;
 }
@@ -100,7 +100,7 @@
   --popover: #1a1200;
   --popover-foreground: #F5E6C8;
   --border: #C8102E;
-  --shadow-color: #5a0010;
+  --shadow-color: #1a0d00;
   --input: #1a1200;
   --primary: #C8102E;
   --primary-hover: #9B0020;

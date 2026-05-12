@@ -140,16 +140,13 @@ export function BoxerSearchResults() {
         </div>
       )}
 
-      {/* Guess counter */}
-      {!gameWon && !gameLost && (
-        <p className="text-sm text-muted-foreground text-right">
-          {guessedFighters.length} / {MAX_GUESSES} guesses used
-        </p>
-      )}
-
       {/* Search bar */}
       {!gameWon && !gameLost && (
-        <BoxerSearchBar key={searchKey} onSelect={handleSelect} />
+        <BoxerSearchBar
+          key={searchKey}
+          onSelect={handleSelect}
+          rightLabel={`${guessedFighters.length} / ${MAX_GUESSES} guesses used`}
+        />
       )}
 
       {/* Results table */}
