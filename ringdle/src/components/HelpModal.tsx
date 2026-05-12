@@ -42,7 +42,7 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
               Objective
             </Text>
             <Text as="p">
-              Guess the mystery boxer within <strong>8 tries!</strong>
+              Guess the 21st century boxer within <strong>8 tries!</strong>
             </Text>
           </section>
 
