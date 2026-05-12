@@ -174,7 +174,7 @@ export function BoxerSearchResults() {
       )}
 
       {/* Hints panel */}
-      {guessedFighters.length >= 4 && targetFighter && ( // Reveal hints after 4 guesses
+      {guessedFighters.length >= 4 && !gameWon && targetFighter && ( // Reveal hints after 4 guesses
         <HintsPanel
           nickname={targetFighter.nickname}
           alias={targetFighter.alias ?? null}
