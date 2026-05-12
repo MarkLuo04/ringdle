@@ -9,6 +9,7 @@ import { BoxerGuessTable, type GuessEntry } from "~/components/BoxerGuessTable";
 import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { Button } from "~/components/retroui/Button";
 import { HelpModal } from "~/components/HelpModal";
+import { HintsPanel } from "~/components/HintsPanel";
 
 const MAX_GUESSES = 8;
 
@@ -17,6 +18,7 @@ export function BoxerSearchResults() {
   const [gameWon, setGameWon]                 = useLocalStorage<boolean>("ringdle-won", false);
   const [gameLost, setGameLost]               = useLocalStorage<boolean>("ringdle-lost", false);
   const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>("ringdle-target-id", null);
+  const [hintsRevealed, setHintsRevealed]     = useLocalStorage<boolean>("ringdle-hints-revealed", false);
 
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [searchKey, setSearchKey] = useState(0);
@@ -109,6 +111,7 @@ export function BoxerSearchResults() {
     setGameLost(false);
     setTargetFighterId(null);
     setPendingId(null);
+    setHintsRevealed(false);
     setSearchKey((k) => k + 1);
     // Clear cached random fighter so re-enabling the query fetches a new one
     void utils.boxing.getRandomFighter.reset();
@@ -132,12 +135,17 @@ export function BoxerSearchResults() {
 
       {/* Win banner */}
       {gameWon && (
-        <div className="rounded-lg border border-green-500 bg-green-50 px-6 py-4 text-center dark:bg-green-950">
-          <p className="text-lg font-semibold text-green-700 dark:text-green-300">
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-green-500 bg-green-50 px-6 py-4 dark:bg-green-950">
+          <p className="text-center text-lg font-semibold text-green-700 dark:text-green-300">
             You got it! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
-          <Button variant="outline" size="sm" onClick={handleNewGame} className="mt-3">
+          <Button
+            variant="default"
+            size="sm"
+            onClick={handleNewGame}
+            className="bg-green-600 border-green-700 hover:bg-green-700"
+          >
             New Game
           </Button>
         </div>
@@ -145,12 +153,12 @@ export function BoxerSearchResults() {
 
       {/* Loss banner */}
       {gameLost && (
-        <div className="rounded-lg border border-red-400 bg-red-50 px-6 py-4 text-center dark:bg-red-950">
-          <p className="text-lg font-semibold text-red-700 dark:text-red-300">
+        <div className="flex flex-col items-center gap-3 rounded-lg border border-red-400 bg-red-50 px-6 py-4 dark:bg-red-950">
+          <p className="text-center text-lg font-semibold text-red-700 dark:text-red-300">
             Out of guesses! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
-          <Button variant="outline" size="sm" onClick={handleNewGame} className="mt-3">
+          <Button variant="outline" size="sm" onClick={handleNewGame}>
             New Game
           </Button>
         </div>
@@ -162,6 +170,17 @@ export function BoxerSearchResults() {
           key={searchKey}
           onSelect={handleSelect}
           rightLabel={`${guessedFighters.length} / ${MAX_GUESSES} guesses used`}
+        />
+      )}
+
+      {/* Hints panel */}
+      {guessedFighters.length >= 4 && targetFighter && ( // Reveal hints after 4 guesses
+        <HintsPanel
+          nickname={targetFighter.nickname}
+          alias={targetFighter.alias ?? null}
+          titles={targetFighter.titles}
+          revealed={hintsRevealed}
+          onReveal={() => setHintsRevealed(true)}
         />
       )}
 

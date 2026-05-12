@@ -25,7 +25,7 @@ export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: Boxer
     { enabled: debouncedInput.length >= 2 }
   );
 
-  // Handle select from search bar
+  // Handle select from search bar 
   function handleSelect(id: string) {
     onSelect(id);
   }

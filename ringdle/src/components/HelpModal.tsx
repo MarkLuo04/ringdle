@@ -59,7 +59,7 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
               <li>
                 Each guess reveals feedback for every attribute.
               </li>
-              <li>You cannot guess the same boxer twice.</li>
+              <li>Hints are available after 4 guesses.</li>
               <li>
                 The game ends when you guess the mystery boxer correctly or when you run out of guesses!
               </li>
