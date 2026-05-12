@@ -25,7 +25,9 @@
     "@auth/prisma-adapter": "^2.7.2",
     "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/react": "^1.1.6",
-    "@prisma/client": "^6.19.3",
+    "@libsql/client": "^0.17.3",
+    "@prisma/adapter-libsql": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@radix-ui/react-slot": "^1.2.4",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.69.0",
@@ -58,13 +60,10 @@
     "postcss": "^8.5.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "prisma": "^6.19.3",
+    "prisma": "^7.8.0",
     "tailwindcss": "^4.0.15",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.27.0"
-  },
-  "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
   },
   "ct3aMetadata": {
     "initVersion": "7.40.0"
