@@ -8,46 +8,65 @@ import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button";
 import { Text } from "@/components/retroui/Text";
 import { Input } from "@/components/retroui/Input";
+import { api } from "~/trpc/react";
 
-export function UserLogin() {
+export function UserRegister() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
+  // Register a new user
+  const register = api.auth.register.useMutation({
+    onSuccess: async () => {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+
+      // Error handling
+      if (result?.error) {
+        setError("Account created but sign-in failed. Please log in.");
+        router.push("/login");
+      } else {
+        router.push("/");
+        router.refresh();
+      }
+    },
+    onError: (err) => {
+      setError(err.message);
+    },
+  });
+
+  // Handle form submission
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setLoading(true);
-
-    // sign in with credentials
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    setLoading(false);
-
-    // Error handling
-    if (result?.error) {
-      setError("Invalid email or password.");
-    } else {
-      router.push("/");
-      router.refresh();
-    }
+    register.mutate({ name, email, password });
   }
 
   return (
-    // Login form
     <Card className="w-full max-w-sm">
+      {/* Register form */}
       <Card.Header className="pb-1">
-        <Card.Title>Sign in to Ringdle</Card.Title>
+        <Card.Title>Create an account</Card.Title>
       </Card.Header>
       <Card.Content>
-        {/* Email input */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <Text as="h6">Name</Text>
+            <Input
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+          </div>
+          {/* Email input */}
           <div className="flex flex-col gap-1">
             <Text as="h6">Email</Text>
             <Input
@@ -69,7 +88,7 @@ export function UserLogin() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              autoComplete="current-password"
+              autoComplete="new-password"
             />
           </div>
 
@@ -80,15 +99,21 @@ export function UserLogin() {
             </Text>
           )}
 
-          {/* Sign in button */}
-          <Button type="submit" size="lg" className="w-full" disabled={loading}>
-            {loading ? "Signing in…" : "Sign in"}
+          {/* Create account button */}
+          <Button
+            type="submit"
+            size="lg"
+            className="w-full"
+            disabled={register.isPending}
+          >
+            {register.isPending ? "Creating account…" : "Create account"}
           </Button>
 
+          {/* Already have an account? link */}
           <Text as="p" className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/register" className="underline">
-              Create one
+            Already have an account?{" "}
+            <Link href="/login" className="underline">
+              Sign in
             </Link>
           </Text>
         </form>

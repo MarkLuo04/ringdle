@@ -2,24 +2,9 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import Credentials from "next-auth/providers/credentials";
-import { scrypt, timingSafeEqual } from "crypto";
-import { promisify } from "util";
 
 import { db } from "~/server/db";
-
-const scryptAsync = promisify(scrypt);
-
-/**
- * Verifies a plain-text password against a stored "hash.salt" string
- * produced by hashPassword (uses Node's built-in crypto.scrypt).
- */
-async function verifyPassword(password: string, stored: string): Promise<boolean> {
-  const [hashed, salt] = stored.split(".");
-  if (!hashed || !salt) return false;
-  const hashedBuf = Buffer.from(hashed, "hex");
-  const suppliedBuf = (await scryptAsync(password, salt, 64)) as Buffer;
-  return timingSafeEqual(hashedBuf, suppliedBuf);
-}
+import { verifyPassword } from "~/server/auth/utils";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
