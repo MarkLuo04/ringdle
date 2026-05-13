@@ -3,7 +3,10 @@ import { env } from "~/env";
 import { PrismaClient } from "../../generated/prisma";
 
 const createPrismaClient = () => {
-  const adapter = new PrismaLibSql({ url: env.DATABASE_URL });
+  const adapter = new PrismaLibSql({
+    url: env.DATABASE_URL,
+    authToken: env.TURSO_AUTH_TOKEN,
+  });
   return new PrismaClient({
     adapter,
     log:
