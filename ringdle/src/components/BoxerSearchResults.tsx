@@ -13,23 +13,72 @@ import { HintsPanel } from "~/components/HintsPanel";
 
 const MAX_GUESSES = 8;
 
+function getTodayUTC(): string {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function msUntilMidnightUTC(): number {
+  const now = new Date();
+  const midnight = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+  );
+  return midnight.getTime() - now.getTime();
+}
+
+function formatCountdown(ms: number): string {
+  const totalSecs = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(totalSecs / 3600).toString().padStart(2, "0");
+  const m = Math.floor((totalSecs % 3600) / 60).toString().padStart(2, "0");
+  const s = (totalSecs % 60).toString().padStart(2, "0");
+  return `${h}:${m}:${s}`;
+}
+
 export function BoxerSearchResults() {
   const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>("ringdle-guesses", []);
   const [gameWon, setGameWon]                 = useLocalStorage<boolean>("ringdle-won", false);
   const [gameLost, setGameLost]               = useLocalStorage<boolean>("ringdle-lost", false);
   const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>("ringdle-target-id", null);
   const [hintsRevealed, setHintsRevealed]     = useLocalStorage<boolean>("ringdle-hints-revealed", false);
+  const [storedDate, setStoredDate]           = useLocalStorage<string | null>("ringdle-date", null);
 
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [searchKey, setSearchKey] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
+  const [countdown, setCountdown] = useState<string>(formatCountdown(msUntilMidnightUTC()));
 
-  const utils = api.useUtils();
+  // On mount: read the stored date directly from localStorage
+  useEffect(() => {
+    const today = getTodayUTC();
+    let rawDate: string | null = null;
+    try {
+      const item = window.localStorage.getItem("ringdle-date");
+      if (item !== null) rawDate = JSON.parse(item) as string;
+    } catch { /* ignore */ }
 
-  // staleTime: Infinity prevents any refetch that would randomize the target midgame
-  // enabled: false when a game is already in progress (targetFighterId stored)
-  const { data: randomFighter } = api.boxing.getRandomFighter.useQuery(undefined, {
-    enabled: targetFighterId === null,
+    if (rawDate !== today) {
+      setGuessedFighters([]);
+      setGameWon(false);
+      setGameLost(false);
+      setTargetFighterId(null);
+      setHintsRevealed(false);
+      setStoredDate(null);
+    }
+  }, []);
+
+  // Countdown timer — only ticks while the game is over
+  useEffect(() => {
+    if (!gameWon && !gameLost) return;
+    const interval = setInterval(() => {
+      setCountdown(formatCountdown(msUntilMidnightUTC()));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [gameWon, gameLost]);
+
+  // Fetch today's daily fighter when there is no active game for today
+  const needsDailyFetch = targetFighterId === null;
+
+  const { data: dailyData } = api.boxing.getDailyFighter.useQuery(undefined, {
+    enabled: needsDailyFetch,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -47,15 +96,15 @@ export function BoxerSearchResults() {
     }
   );
 
-  const targetFighter = targetFighterId !== null ? storedFighter : randomFighter;
+  const targetFighter = targetFighterId !== null ? storedFighter : dailyData?.fighter;
 
-  // Persist the random fighter's ID the first time it resolves
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Persist the daily fighter's ID and today's date the first time it resolves
   useEffect(() => {
-    if (randomFighter && targetFighterId === null) {
-      setTargetFighterId(randomFighter.id);
+    if (dailyData && targetFighterId === null) {
+      setTargetFighterId(dailyData.fighter.id);
+      setStoredDate(dailyData.dateString);
     }
-  }, [randomFighter]);
+  }, [dailyData]);
 
   // Log target fighter for debugging
   useEffect(() => {
@@ -69,7 +118,6 @@ export function BoxerSearchResults() {
   );
 
   // Handle fetched fighter from search bar
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!fetchedFighter || !targetFighter) return;
 
@@ -106,19 +154,6 @@ export function BoxerSearchResults() {
     }
   }
 
-  // Reset game state
-  function handleNewGame() {
-    setGuessedFighters([]);
-    setGameWon(false);
-    setGameLost(false);
-    setTargetFighterId(null);
-    setPendingId(null);
-    setHintsRevealed(false);
-    setSearchKey((k) => k + 1);
-    // Clear cached random fighter so re-enabling the query fetches a new one
-    void utils.boxing.getRandomFighter.reset();
-  }
-
   return (
     <div className="flex flex-col gap-6 w-full max-w-5xl">
       <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
@@ -142,14 +177,9 @@ export function BoxerSearchResults() {
             You got it! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
-          <Button
-            variant="default"
-            size="sm"
-            onClick={handleNewGame}
-            className="bg-green-600 border-green-700 hover:bg-green-700"
-          >
-            New Game
-          </Button>
+          <p className="text-sm text-green-600 dark:text-green-400">
+            Next puzzle in <span className="font-mono font-bold">{countdown}</span>
+          </p>
         </div>
       )}
 
@@ -160,9 +190,9 @@ export function BoxerSearchResults() {
             Out of guesses! The boxer was{" "}
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
-          <Button variant="outline" size="sm" onClick={handleNewGame}>
-            New Game
-          </Button>
+          <p className="text-sm text-red-600 dark:text-red-400">
+            Next puzzle in <span className="font-mono font-bold">{countdown}</span>
+          </p>
         </div>
       )}
 
@@ -176,7 +206,7 @@ export function BoxerSearchResults() {
       )}
 
       {/* Hints panel */}
-      {guessedFighters.length >= 4 && !gameWon && targetFighter && ( // Reveal hints after 4 guesses
+      {guessedFighters.length >= 4 && !gameWon && targetFighter && (
         <HintsPanel
           nickname={targetFighter.nickname}
           alias={targetFighter.alias ?? null}

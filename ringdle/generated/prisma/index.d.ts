@@ -4731,6 +4731,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    password: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4739,6 +4740,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    password: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -4747,6 +4749,7 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    password: number
     _all: number
   }
 
@@ -4757,6 +4760,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    password?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -4765,6 +4769,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    password?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -4773,6 +4778,7 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    password?: true
     _all?: true
   }
 
@@ -4854,6 +4860,7 @@ export namespace Prisma {
     email: string | null
     emailVerified: Date | null
     image: string | null
+    password: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -4879,6 +4886,7 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    password?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     posts?: boolean | User$postsArgs<ExtArgs>
@@ -4891,6 +4899,7 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    password?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4899,6 +4908,7 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    password?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -4907,9 +4917,10 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    password?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -4932,6 +4943,7 @@ export namespace Prisma {
       email: string | null
       emailVerified: Date | null
       image: string | null
+      password: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5363,6 +5375,7 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly password: FieldRef<"User", 'String'>
   }
     
 
@@ -6843,6 +6856,7 @@ export namespace Prisma {
     stopped: number | null
     divisionWeightLb: number | null
     divisionWeightKg: number | null
+    dailyOrder: number | null
   }
 
   export type FighterSumAggregateOutputType = {
@@ -6860,6 +6874,7 @@ export namespace Prisma {
     stopped: number | null
     divisionWeightLb: number | null
     divisionWeightKg: number | null
+    dailyOrder: number | null
   }
 
   export type FighterMinAggregateOutputType = {
@@ -6892,6 +6907,7 @@ export namespace Prisma {
     divisionWeightLb: number | null
     divisionWeightKg: number | null
     titles: string | null
+    dailyOrder: number | null
   }
 
   export type FighterMaxAggregateOutputType = {
@@ -6924,6 +6940,7 @@ export namespace Prisma {
     divisionWeightLb: number | null
     divisionWeightKg: number | null
     titles: string | null
+    dailyOrder: number | null
   }
 
   export type FighterCountAggregateOutputType = {
@@ -6956,6 +6973,7 @@ export namespace Prisma {
     divisionWeightLb: number
     divisionWeightKg: number
     titles: number
+    dailyOrder: number
     _all: number
   }
 
@@ -6975,6 +6993,7 @@ export namespace Prisma {
     stopped?: true
     divisionWeightLb?: true
     divisionWeightKg?: true
+    dailyOrder?: true
   }
 
   export type FighterSumAggregateInputType = {
@@ -6992,6 +7011,7 @@ export namespace Prisma {
     stopped?: true
     divisionWeightLb?: true
     divisionWeightKg?: true
+    dailyOrder?: true
   }
 
   export type FighterMinAggregateInputType = {
@@ -7024,6 +7044,7 @@ export namespace Prisma {
     divisionWeightLb?: true
     divisionWeightKg?: true
     titles?: true
+    dailyOrder?: true
   }
 
   export type FighterMaxAggregateInputType = {
@@ -7056,6 +7077,7 @@ export namespace Prisma {
     divisionWeightLb?: true
     divisionWeightKg?: true
     titles?: true
+    dailyOrder?: true
   }
 
   export type FighterCountAggregateInputType = {
@@ -7088,6 +7110,7 @@ export namespace Prisma {
     divisionWeightLb?: true
     divisionWeightKg?: true
     titles?: true
+    dailyOrder?: true
     _all?: true
   }
 
@@ -7207,6 +7230,7 @@ export namespace Prisma {
     divisionWeightLb: number | null
     divisionWeightKg: number | null
     titles: string
+    dailyOrder: number | null
     _count: FighterCountAggregateOutputType | null
     _avg: FighterAvgAggregateOutputType | null
     _sum: FighterSumAggregateOutputType | null
@@ -7258,6 +7282,7 @@ export namespace Prisma {
     divisionWeightLb?: boolean
     divisionWeightKg?: boolean
     titles?: boolean
+    dailyOrder?: boolean
   }, ExtArgs["result"]["fighter"]>
 
   export type FighterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7290,6 +7315,7 @@ export namespace Prisma {
     divisionWeightLb?: boolean
     divisionWeightKg?: boolean
     titles?: boolean
+    dailyOrder?: boolean
   }, ExtArgs["result"]["fighter"]>
 
   export type FighterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7322,6 +7348,7 @@ export namespace Prisma {
     divisionWeightLb?: boolean
     divisionWeightKg?: boolean
     titles?: boolean
+    dailyOrder?: boolean
   }, ExtArgs["result"]["fighter"]>
 
   export type FighterSelectScalar = {
@@ -7354,9 +7381,10 @@ export namespace Prisma {
     divisionWeightLb?: boolean
     divisionWeightKg?: boolean
     titles?: boolean
+    dailyOrder?: boolean
   }
 
-  export type FighterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "age" | "gender" | "nickname" | "alias" | "nationality" | "nationalityCode" | "stance" | "debut" | "height" | "heightCm" | "heightIn" | "heightFt" | "reach" | "reachCm" | "reachIn" | "wins" | "losses" | "draws" | "totalBouts" | "totalRounds" | "koWins" | "stopped" | "divisionId" | "divisionName" | "divisionWeightLb" | "divisionWeightKg" | "titles", ExtArgs["result"]["fighter"]>
+  export type FighterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "age" | "gender" | "nickname" | "alias" | "nationality" | "nationalityCode" | "stance" | "debut" | "height" | "heightCm" | "heightIn" | "heightFt" | "reach" | "reachCm" | "reachIn" | "wins" | "losses" | "draws" | "totalBouts" | "totalRounds" | "koWins" | "stopped" | "divisionId" | "divisionName" | "divisionWeightLb" | "divisionWeightKg" | "titles" | "dailyOrder", ExtArgs["result"]["fighter"]>
 
   export type $FighterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Fighter"
@@ -7391,6 +7419,7 @@ export namespace Prisma {
       divisionWeightLb: number | null
       divisionWeightKg: number | null
       titles: string
+      dailyOrder: number | null
     }, ExtArgs["result"]["fighter"]>
     composites: {}
   }
@@ -7843,6 +7872,7 @@ export namespace Prisma {
     readonly divisionWeightLb: FieldRef<"Fighter", 'Float'>
     readonly divisionWeightKg: FieldRef<"Fighter", 'Float'>
     readonly titles: FieldRef<"Fighter", 'String'>
+    readonly dailyOrder: FieldRef<"Fighter", 'Int'>
   }
     
 
@@ -8268,7 +8298,8 @@ export namespace Prisma {
     name: 'name',
     email: 'email',
     emailVerified: 'emailVerified',
-    image: 'image'
+    image: 'image',
+    password: 'password'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -8312,7 +8343,8 @@ export namespace Prisma {
     divisionName: 'divisionName',
     divisionWeightLb: 'divisionWeightLb',
     divisionWeightKg: 'divisionWeightKg',
-    titles: 'titles'
+    titles: 'titles',
+    dailyOrder: 'dailyOrder'
   };
 
   export type FighterScalarFieldEnum = (typeof FighterScalarFieldEnum)[keyof typeof FighterScalarFieldEnum]
@@ -8584,6 +8616,7 @@ export namespace Prisma {
     email?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    password?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -8595,6 +8628,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     posts?: PostOrderByRelationAggregateInput
@@ -8609,6 +8643,7 @@ export namespace Prisma {
     name?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    password?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     posts?: PostListRelationFilter
@@ -8620,6 +8655,7 @@ export namespace Prisma {
     email?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -8634,6 +8670,7 @@ export namespace Prisma {
     email?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    password?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type VerificationTokenWhereInput = {
@@ -8712,6 +8749,7 @@ export namespace Prisma {
     divisionWeightLb?: FloatNullableFilter<"Fighter"> | number | null
     divisionWeightKg?: FloatNullableFilter<"Fighter"> | number | null
     titles?: StringFilter<"Fighter"> | string
+    dailyOrder?: IntNullableFilter<"Fighter"> | number | null
   }
 
   export type FighterOrderByWithRelationInput = {
@@ -8744,10 +8782,12 @@ export namespace Prisma {
     divisionWeightLb?: SortOrderInput | SortOrder
     divisionWeightKg?: SortOrderInput | SortOrder
     titles?: SortOrder
+    dailyOrder?: SortOrderInput | SortOrder
   }
 
   export type FighterWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    dailyOrder?: number
     AND?: FighterWhereInput | FighterWhereInput[]
     OR?: FighterWhereInput[]
     NOT?: FighterWhereInput | FighterWhereInput[]
@@ -8779,7 +8819,7 @@ export namespace Prisma {
     divisionWeightLb?: FloatNullableFilter<"Fighter"> | number | null
     divisionWeightKg?: FloatNullableFilter<"Fighter"> | number | null
     titles?: StringFilter<"Fighter"> | string
-  }, "id">
+  }, "id" | "dailyOrder">
 
   export type FighterOrderByWithAggregationInput = {
     id?: SortOrder
@@ -8811,6 +8851,7 @@ export namespace Prisma {
     divisionWeightLb?: SortOrderInput | SortOrder
     divisionWeightKg?: SortOrderInput | SortOrder
     titles?: SortOrder
+    dailyOrder?: SortOrderInput | SortOrder
     _count?: FighterCountOrderByAggregateInput
     _avg?: FighterAvgOrderByAggregateInput
     _max?: FighterMaxOrderByAggregateInput
@@ -8851,6 +8892,7 @@ export namespace Prisma {
     divisionWeightLb?: FloatNullableWithAggregatesFilter<"Fighter"> | number | null
     divisionWeightKg?: FloatNullableWithAggregatesFilter<"Fighter"> | number | null
     titles?: StringWithAggregatesFilter<"Fighter"> | string
+    dailyOrder?: IntNullableWithAggregatesFilter<"Fighter"> | number | null
   }
 
   export type PostCreateInput = {
@@ -9070,6 +9112,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
@@ -9081,6 +9124,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
@@ -9092,6 +9136,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
@@ -9103,6 +9148,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -9114,6 +9160,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -9122,6 +9169,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -9130,6 +9178,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type VerificationTokenCreateInput = {
@@ -9204,6 +9253,7 @@ export namespace Prisma {
     divisionWeightLb?: number | null
     divisionWeightKg?: number | null
     titles?: string
+    dailyOrder?: number | null
   }
 
   export type FighterUncheckedCreateInput = {
@@ -9236,6 +9286,7 @@ export namespace Prisma {
     divisionWeightLb?: number | null
     divisionWeightKg?: number | null
     titles?: string
+    dailyOrder?: number | null
   }
 
   export type FighterUpdateInput = {
@@ -9268,6 +9319,7 @@ export namespace Prisma {
     divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
     divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
     titles?: StringFieldUpdateOperationsInput | string
+    dailyOrder?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type FighterUncheckedUpdateInput = {
@@ -9300,6 +9352,7 @@ export namespace Prisma {
     divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
     divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
     titles?: StringFieldUpdateOperationsInput | string
+    dailyOrder?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type FighterCreateManyInput = {
@@ -9332,6 +9385,7 @@ export namespace Prisma {
     divisionWeightLb?: number | null
     divisionWeightKg?: number | null
     titles?: string
+    dailyOrder?: number | null
   }
 
   export type FighterUpdateManyMutationInput = {
@@ -9364,6 +9418,7 @@ export namespace Prisma {
     divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
     divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
     titles?: StringFieldUpdateOperationsInput | string
+    dailyOrder?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type FighterUncheckedUpdateManyInput = {
@@ -9396,6 +9451,7 @@ export namespace Prisma {
     divisionWeightLb?: NullableFloatFieldUpdateOperationsInput | number | null
     divisionWeightKg?: NullableFloatFieldUpdateOperationsInput | number | null
     titles?: StringFieldUpdateOperationsInput | string
+    dailyOrder?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -9712,6 +9768,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    password?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -9720,6 +9777,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    password?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -9728,6 +9786,7 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    password?: SortOrder
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -9819,6 +9878,7 @@ export namespace Prisma {
     divisionWeightLb?: SortOrder
     divisionWeightKg?: SortOrder
     titles?: SortOrder
+    dailyOrder?: SortOrder
   }
 
   export type FighterAvgOrderByAggregateInput = {
@@ -9836,6 +9896,7 @@ export namespace Prisma {
     stopped?: SortOrder
     divisionWeightLb?: SortOrder
     divisionWeightKg?: SortOrder
+    dailyOrder?: SortOrder
   }
 
   export type FighterMaxOrderByAggregateInput = {
@@ -9868,6 +9929,7 @@ export namespace Prisma {
     divisionWeightLb?: SortOrder
     divisionWeightKg?: SortOrder
     titles?: SortOrder
+    dailyOrder?: SortOrder
   }
 
   export type FighterMinOrderByAggregateInput = {
@@ -9900,6 +9962,7 @@ export namespace Prisma {
     divisionWeightLb?: SortOrder
     divisionWeightKg?: SortOrder
     titles?: SortOrder
+    dailyOrder?: SortOrder
   }
 
   export type FighterSumOrderByAggregateInput = {
@@ -9917,6 +9980,7 @@ export namespace Prisma {
     stopped?: SortOrder
     divisionWeightLb?: SortOrder
     divisionWeightKg?: SortOrder
+    dailyOrder?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -10393,6 +10457,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
   }
@@ -10403,6 +10468,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
   }
@@ -10429,6 +10495,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
   }
@@ -10439,6 +10506,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
   }
@@ -10449,6 +10517,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
   }
@@ -10459,6 +10528,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -10485,6 +10555,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
   }
@@ -10495,6 +10566,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
   }
@@ -10505,6 +10577,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutCreatedByInput
   }
@@ -10515,6 +10588,7 @@ export namespace Prisma {
     email?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    password?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutCreatedByInput
   }
@@ -10541,6 +10615,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutCreatedByNestedInput
   }
@@ -10551,6 +10626,7 @@ export namespace Prisma {
     email?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutCreatedByNestedInput
   }

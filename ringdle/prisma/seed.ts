@@ -142,6 +142,13 @@ async function main() {
 
   console.log(`Starting seed for ${FIGHTER_NAMES.length} fighters...\n`);
 
+  // Pre-fetch all existing fighter IDs so we know which are new (need dailyOrder)
+  const existingIds = new Set(
+    (await db.fighter.findMany({ select: { id: true } })).map((f) => f.id),
+  );
+  const { _max } = await db.fighter.aggregate({ _max: { dailyOrder: true } });
+  let orderCounter = (_max.dailyOrder ?? 0) + 1;
+
   let saved = 0;
   let skipped = 0;
   let failed = 0;
@@ -159,6 +166,10 @@ async function main() {
         skipped++;
         continue;
       }
+
+      // Assign dailyOrder only for fighters not yet in the database
+      const isNew = !existingIds.has(fighter.id);
+      const dailyOrderForCreate = isNew ? orderCounter++ : 0;
 
       // Updates and inserts fighter data
       await db.fighter.upsert({
@@ -197,6 +208,7 @@ async function main() {
         create: {
           id: fighter.id,
           name: fighter.name,
+          dailyOrder: dailyOrderForCreate,
           age: fighter.age,
           gender: fighter.gender,
           nickname: fighter.nickname ?? null,

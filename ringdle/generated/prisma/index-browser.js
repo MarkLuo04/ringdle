@@ -153,7 +153,8 @@ exports.Prisma.UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   emailVerified: 'emailVerified',
-  image: 'image'
+  image: 'image',
+  password: 'password'
 };
 
 exports.Prisma.VerificationTokenScalarFieldEnum = {
@@ -191,7 +192,8 @@ exports.Prisma.FighterScalarFieldEnum = {
   divisionName: 'divisionName',
   divisionWeightLb: 'divisionWeightLb',
   divisionWeightKg: 'divisionWeightKg',
-  titles: 'titles'
+  titles: 'titles',
+  dailyOrder: 'dailyOrder'
 };
 
 exports.Prisma.SortOrder = {
