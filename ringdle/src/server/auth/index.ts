@@ -8,7 +8,12 @@ import { db } from "~/server/db";
 import { verifyPassword } from "~/server/auth/utils";
 
 // Create NextAuth instance
-const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth({
+const {
+  auth: uncachedAuth,
+  handlers,
+  signIn,
+  signOut,
+} = NextAuth({
   ...authConfig,
   adapter: PrismaAdapter(db),
   providers: [
@@ -34,13 +39,18 @@ const { auth: uncachedAuth, handlers, signIn, signOut } = NextAuth({
         const valid = await verifyPassword(password, user.password);
         if (!valid) return null;
 
-        // Check if email is verified
-        if (!user.emailVerified) {
-          throw new Error("Please verify your email before signing in.");
-        }
+        // [EMAIL VERIFICATION] - reenable when email verification is enabled
+        // if (!user.emailVerified) {
+        //   throw new Error("Please verify your email before signing in.");
+        // }
 
         // Return user data
-        return { id: user.id, name: user.name, email: user.email, image: user.image };
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.image,
+        };
       },
     }),
   ],

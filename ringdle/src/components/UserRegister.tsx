@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/retroui/Card";
@@ -51,9 +52,19 @@ export function UserRegister() {
 
   // Register a new user
   const register = api.auth.register.useMutation({
-    onSuccess: (data) => {
-      const params = data.email ? `?email=${encodeURIComponent(data.email)}` : "";
-      router.push(`/register/check-email${params}`);
+    onSuccess: async () => {
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (result?.error) {
+        setError("Account created but sign-in failed. Please log in.");
+        router.push("/login");
+      } else {
+        router.push("/");
+        router.refresh();
+      }
     },
     onError: (err) => {
       // Extract the first Zod field error when available, otherwise use the message
@@ -114,7 +125,7 @@ export function UserRegister() {
               autoComplete="email"
             />
             {emailError && (
-              <Text as="p" className="text-sm text-destructive">
+              <Text as="p" className="text-destructive text-sm">
                 {emailError}
               </Text>
             )}
@@ -136,7 +147,7 @@ export function UserRegister() {
               autoComplete="new-password"
             />
             {passwordError && (
-              <Text as="p" className="text-sm text-destructive">
+              <Text as="p" className="text-destructive text-sm">
                 {passwordError}
               </Text>
             )}
@@ -144,7 +155,7 @@ export function UserRegister() {
 
           {/* General error message */}
           {error && (
-            <Text as="p" className="text-sm text-destructive">
+            <Text as="p" className="text-destructive text-sm">
               {error}
             </Text>
           )}

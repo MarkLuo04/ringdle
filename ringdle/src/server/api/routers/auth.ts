@@ -1,4 +1,5 @@
 import { randomBytes } from "crypto";
+import { promises as dns } from "dns";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { Resend } from "resend";
@@ -11,10 +12,30 @@ const resend = new Resend(env.RESEND_API_KEY);
 
 const TOKEN_EXPIRY_HOURS = 24;
 
-async function sendVerificationEmail(name: string, email: string, token: string) {
-  const verifyUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/verify-email?token=${token}`;
+// Returns false when the domain has no MX records (cannot receive email)
+async function checkMxRecord(email: string): Promise<boolean> {
+  const domain = email.split("@")[1];
+  if (!domain) return false;
+  try {
+    const records = await dns.resolveMx(domain);
+    return records.length > 0;
+  } catch {
+    return false;
+  }
+}
 
-  // Send verification email
+async function sendVerificationEmail(
+  name: string,
+  email: string,
+  token: string,
+) {
+  const baseUrl =
+    process.env.NEXTAUTH_URL ??
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
+  const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
+
   const { error } = await resend.emails.send({
     from: env.RESEND_SENDER_EMAIL,
     to: email,
@@ -46,28 +67,40 @@ export const authRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      // Reject addresses whose domain has no mail servers
+      const mxValid = await checkMxRecord(input.email);
+      if (!mxValid) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message:
+            "That email domain does not exist. Please use a real email address.",
+        });
+      }
+
       const existing = await ctx.db.user.findUnique({
         where: { email: input.email },
-        select: { id: true, name: true, emailVerified: true },
+        select: { id: true, emailVerified: true },
       });
 
       if (existing) {
-        // If the account exists but was never verified, resend the verification
         if (!existing.emailVerified) {
-          await ctx.db.verificationToken.deleteMany({ where: { identifier: input.email } });
-          const token = randomBytes(32).toString("hex");
-          const expires = new Date(Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
-          await ctx.db.verificationToken.create({
-            data: { identifier: input.email, token, expires },
+          // [EMAIL VERIFICATION] - reenable when email verification is enabled
+          // below with the original token-generation + sendVerificationEmail block:
+          // await ctx.db.verificationToken.deleteMany({ where: { identifier: input.email } });
+          // const token = randomBytes(32).toString("hex");
+          // const expires = new Date(Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
+          // await ctx.db.verificationToken.create({ data: { identifier: input.email, token, expires } });
+          // const emailError = await sendVerificationEmail(existing.name ?? input.name, input.email, token);
+          // if (emailError) {
+          //   throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Could not send the verification email. Please try again.", cause: emailError });
+          // }
+          // return { email: input.email };
+
+          // Account exists but was never verified
+          await ctx.db.user.update({
+            where: { id: existing.id },
+            data: { emailVerified: new Date() },
           });
-          const emailError = await sendVerificationEmail(existing.name ?? input.name, input.email, token);
-          if (emailError) {
-            throw new TRPCError({
-              code: "INTERNAL_SERVER_ERROR",
-              message: "Could not send the verification email. Please try again.",
-              cause: emailError,
-            });
-          }
           return { email: input.email };
         }
 
@@ -79,36 +112,27 @@ export const authRouter = createTRPCRouter({
 
       const hashedPassword = await hashPassword(input.password);
 
+      // [EMAIL VERIFICATION] - reenable when email verification is enabled
+      // below and restore the token-generation + sendVerificationEmail block:
+      // const token = randomBytes(32).toString("hex");
+      // const expires = new Date(Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
+      // await ctx.db.verificationToken.create({ data: { identifier: input.email, token, expires } });
+      // const emailError = await sendVerificationEmail(input.name, input.email, token);
+      // if (emailError) {
+      //   // Roll back so the user can try again cleanly
+      //   await ctx.db.verificationToken.deleteMany({ where: { identifier: input.email } });
+      //   await ctx.db.user.delete({ where: { id: user.id } });
+      //   throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Could not send the verification email. Please try again.", cause: emailError });
+      // }
       const user = await ctx.db.user.create({
         data: {
           name: input.name,
           email: input.email,
           password: hashedPassword,
+          emailVerified: new Date(), // remove this line when re-enabling verification
         },
         select: { id: true, name: true, email: true },
       });
-
-      const token = randomBytes(32).toString("hex");
-      const expires = new Date(
-        Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000,
-      );
-
-      await ctx.db.verificationToken.create({
-        data: { identifier: input.email, token, expires },
-      });
-
-      const emailError = await sendVerificationEmail(input.name, input.email, token);
-
-      if (emailError) {
-        // Roll back so the user can try again cleanly
-        await ctx.db.verificationToken.deleteMany({ where: { identifier: input.email } });
-        await ctx.db.user.delete({ where: { id: user.id } });
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Could not send the verification email. Please try again.",
-          cause: emailError,
-        });
-      }
 
       return { email: user.email };
     }),
@@ -132,18 +156,19 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      // cooldown between resends by checking the existing verification token
       const RESEND_COOLDOWN_SECONDS = 60;
-      const existing = await ctx.db.verificationToken.findFirst({
+      const existingToken = await ctx.db.verificationToken.findFirst({
         where: { identifier: input.email },
       });
-      if (existing) {
+      if (existingToken) {
         const createdAt = new Date(
-          existing.expires.getTime() - TOKEN_EXPIRY_HOURS * 60 * 60 * 1000,
+          existingToken.expires.getTime() - TOKEN_EXPIRY_HOURS * 60 * 60 * 1000,
         );
         const secondsSinceCreated = (Date.now() - createdAt.getTime()) / 1000;
         if (secondsSinceCreated < RESEND_COOLDOWN_SECONDS) {
-          const remaining = Math.ceil(RESEND_COOLDOWN_SECONDS - secondsSinceCreated);
+          const remaining = Math.ceil(
+            RESEND_COOLDOWN_SECONDS - secondsSinceCreated,
+          );
           throw new TRPCError({
             code: "TOO_MANY_REQUESTS",
             message: `Please wait ${remaining} second${remaining === 1 ? "" : "s"} before resending.`,
@@ -151,8 +176,9 @@ export const authRouter = createTRPCRouter({
         }
       }
 
-      // Replace any existing tokens with a fresh one
-      await ctx.db.verificationToken.deleteMany({ where: { identifier: input.email } });
+      await ctx.db.verificationToken.deleteMany({
+        where: { identifier: input.email },
+      });
 
       const token = randomBytes(32).toString("hex");
       const expires = new Date(
@@ -196,10 +222,13 @@ export const authRouter = createTRPCRouter({
       }
 
       if (record.expires < new Date()) {
-        await ctx.db.verificationToken.delete({ where: { token: input.token } });
+        await ctx.db.verificationToken.delete({
+          where: { token: input.token },
+        });
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "This verification link has expired. Please request a new one.",
+          message:
+            "This verification link has expired. Please request a new one.",
         });
       }
 
