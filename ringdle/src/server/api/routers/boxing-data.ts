@@ -6,6 +6,7 @@ import type {
   BoxingDataFighterTitle,
 } from "./types/boxing-data.types";
 import type { Fighter } from "../../../../generated/prisma";
+import { getDailyFighterRecordForUtcDate } from "~/server/lib/dailyFighter";
 
 function toBoxingDataFighter(f: Fighter): BoxingDataFighter {
   return {
@@ -71,22 +72,9 @@ export const boxingRouter = createTRPCRouter({
     return toBoxingDataFighter(random);
   }),
 
-  // Get the daily fighter
-  // Fighters are ordered by dailyOrder (assigned at seed time) so the cycle is stable
   getDailyFighter: publicProcedure.query(async () => {
-    const fighters = await db.fighter.findMany({
-      where: { dailyOrder: { not: null } },
-      orderBy: { dailyOrder: "asc" },
-    });
-
-    if (fighters.length === 0) {
-      throw new Error("No fighters with dailyOrder in database");
-    }
-
-    const dayNumber = Math.floor(Date.now() / 86_400_000);
-    const fighter = fighters[dayNumber % fighters.length]!;
     const dateString = new Date().toISOString().slice(0, 10);
-
+    const { fighter } = await getDailyFighterRecordForUtcDate(dateString);
     return { fighter: toBoxingDataFighter(fighter), dateString };
   }),
 

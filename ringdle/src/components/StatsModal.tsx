@@ -12,6 +12,7 @@ interface StatsModalProps {
   onClose: () => void;
 }
 
+// Displays stats in a tile format
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded border-2 border-black bg-white px-4 py-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:bg-neutral-900">
@@ -28,6 +29,7 @@ function StatTile({ label, value }: { label: string; value: string }) {
   );
 }
 
+// Modal component for displaying user statistics
 export function StatsModal({ open, onClose }: StatsModalProps) {
   const { status } = useSession();
 
@@ -48,6 +50,7 @@ export function StatsModal({ open, onClose }: StatsModalProps) {
         className="mx-4 block w-full max-w-lg overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <Card.Header className="flex-row items-center justify-between border-b-2 border-black">
           <Card.Title className="mb-0">Your stats</Card.Title>
           <Button
@@ -60,6 +63,7 @@ export function StatsModal({ open, onClose }: StatsModalProps) {
           </Button>
         </Card.Header>
 
+        {/* Content */}
         <Card.Content className="max-h-[70vh] space-y-4 overflow-y-auto">
           {!loggedIn && (
             <Text as="p">
@@ -81,6 +85,7 @@ export function StatsModal({ open, onClose }: StatsModalProps) {
             </Text>
           )}
 
+          {/* Loading state */}
           {loggedIn && isLoading && <Text as="p">Loading your stats…</Text>}
 
           {loggedIn && stats && (
@@ -113,6 +118,7 @@ export function StatsModal({ open, onClose }: StatsModalProps) {
           )}
         </Card.Content>
 
+        {/* Close button */}
         <div className="flex justify-end border-t-2 border-black px-4 py-3">
           <Button variant="default" size="sm" onClick={onClose}>
             Close

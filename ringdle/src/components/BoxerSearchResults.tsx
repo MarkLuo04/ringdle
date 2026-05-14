@@ -12,8 +12,7 @@ import { Button } from "~/components/retroui/Button";
 import { HelpModal } from "~/components/HelpModal";
 import { HintsPanel } from "~/components/HintsPanel";
 import { StatsModal } from "~/components/StatsModal";
-
-const MAX_GUESSES = 8;
+import { MAX_GUESSES } from "~/lib/ringdleGame";
 
 function getTodayUTC(): string {
   return new Date().toISOString().slice(0, 10);
@@ -42,6 +41,18 @@ function formatCountdown(ms: number): string {
 export function BoxerSearchResults() {
   const { data: session } = useSession();
   const utils = api.useUtils();
+
+  const playedDateToday = getTodayUTC();
+
+  const { data: serverTodayGame, isPending: serverTodayPending } =
+    api.stats.getTodayGame.useQuery(
+      { playedDate: playedDateToday },
+      {
+        enabled: !!session?.user,
+        staleTime: 60_000,
+        refetchOnWindowFocus: true,
+      },
+    );
 
   const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>(
     "ringdle-guesses",
@@ -73,9 +84,13 @@ export function BoxerSearchResults() {
     formatCountdown(msUntilMidnightUTC()),
   );
   const resultRecordedRef = useRef(false);
+  const lastServerHydrateKeyRef = useRef<string | null>(null);
+  const postLoginSyncSentRef = useRef<string | null>(null);
 
-  const recordResult = api.stats.recordResult.useMutation({
-    onSuccess: () => {
+  const syncCompletedGame = api.stats.syncCompletedGame.useMutation({
+    onSuccess: (_result, variables) => {
+      postLoginSyncSentRef.current = `${variables.playedDate}:${variables.guessedFighterIds.join("|")}`;
+      void utils.stats.getTodayGame.invalidate();
       void utils.stats.getMyStats.invalidate();
     },
     onError: () => {
@@ -102,6 +117,8 @@ export function BoxerSearchResults() {
       setHintsRevealed(false);
       setStoredDate(null);
       resultRecordedRef.current = false;
+      lastServerHydrateKeyRef.current = null;
+      postLoginSyncSentRef.current = null;
     }
   }, []);
 
@@ -113,6 +130,113 @@ export function BoxerSearchResults() {
     }, 1000);
     return () => clearInterval(interval);
   }, [gameWon, gameLost]);
+
+  // Restore today's finished game from server (logged-in, cross-device).
+  useEffect(() => {
+    if (!session?.user || serverTodayPending) return;
+
+    const row = serverTodayGame;
+    if (!row || row.playedDate !== playedDateToday) return;
+
+    const finished = row.won || row.guesses >= MAX_GUESSES;
+    if (!finished) return;
+
+    const hydrateKey = `${row.playedDate}:${row.guesses}:${row.guessedFighterIds.join("|")}:${row.hintsRevealed}`;
+    if (lastServerHydrateKeyRef.current === hydrateKey) return;
+
+    setTargetFighterId(row.fighterId);
+    setStoredDate(row.playedDate);
+    setGameWon(row.won);
+    setGameLost(!row.won && row.guesses >= MAX_GUESSES);
+    setHintsRevealed(row.hintsRevealed);
+
+    if (row.guessedFighterIds.length === 0) {
+      setGuessedFighters([]);
+      lastServerHydrateKeyRef.current = hydrateKey;
+      return;
+    }
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const target = await utils.boxing.getFighterById.fetch({
+          id: row.fighterId,
+        });
+        const entries: GuessEntry[] = [];
+        for (const id of row.guessedFighterIds) {
+          if (cancelled) return;
+          const fighter = await utils.boxing.getFighterById.fetch({ id });
+          entries.push({
+            fighter,
+            result: compareFighters(fighter, target),
+          });
+        }
+        if (!cancelled) {
+          setGuessedFighters(entries);
+          lastServerHydrateKeyRef.current = hydrateKey;
+        }
+      } catch {
+        lastServerHydrateKeyRef.current = null;
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    session?.user,
+    serverTodayPending,
+    serverTodayGame,
+    playedDateToday,
+    utils,
+    setTargetFighterId,
+    setStoredDate,
+    setGameWon,
+    setGameLost,
+    setHintsRevealed,
+    setGuessedFighters,
+  ]);
+
+  // Push anonymous completion to the server after sign-in (same device).
+  useEffect(() => {
+    if (!session?.user || serverTodayPending) return;
+
+    const today = playedDateToday;
+    if (!(gameWon || gameLost) || storedDate !== today) return;
+
+    const ids = guessedFighters.map((g) => g.fighter.id);
+    if (ids.length === 0 || !targetFighterId) return;
+
+    const row = serverTodayGame ?? null;
+    if (row !== null && row.guessedFighterIds.length > 0) return;
+
+    const syncKey = `${today}:${ids.join("|")}`;
+    if (postLoginSyncSentRef.current === syncKey) return;
+    if (syncCompletedGame.isPending) return;
+
+    syncCompletedGame.mutate({
+      won: gameWon,
+      guesses: ids.length,
+      fighterId: targetFighterId,
+      playedDate: storedDate ?? today,
+      guessedFighterIds: ids,
+      hintsRevealed,
+    });
+  }, [
+    session?.user,
+    serverTodayPending,
+    serverTodayGame,
+    playedDateToday,
+    gameWon,
+    gameLost,
+    storedDate,
+    guessedFighters,
+    targetFighterId,
+    hintsRevealed,
+    syncCompletedGame.isPending,
+    syncCompletedGame.mutate,
+  ]);
 
   // Fetch today's daily fighter when there is no active game for today
   const needsDailyFetch = targetFighterId === null;
@@ -197,11 +321,13 @@ export function BoxerSearchResults() {
       const playedDate = storedDate ?? dailyData?.dateString ?? getTodayUTC();
       if (session?.user && !resultRecordedRef.current && targetFighter?.id) {
         resultRecordedRef.current = true;
-        recordResult.mutate({
+        syncCompletedGame.mutate({
           won: endedWin,
           guesses: nextGuesses.length,
           fighterId: targetFighter.id,
           playedDate,
+          guessedFighterIds: nextGuesses.map((g) => g.fighter.id),
+          hintsRevealed,
         });
       }
     }
@@ -215,6 +341,7 @@ export function BoxerSearchResults() {
     session?.user,
     storedDate,
     dailyData?.dateString,
+    hintsRevealed,
   ]);
 
   // Handle select from search bar

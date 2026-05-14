@@ -89,13 +89,15 @@ model UserStats {
 }
 
 model GameResult {
-    id         String  @id @default(cuid())
-    userId     String
-    user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    playedDate String
-    won        Boolean
-    guesses    Int
-    fighterId  String
+    id                  String  @id @default(cuid())
+    userId              String
+    user                User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    playedDate          String
+    won                 Boolean
+    guesses             Int
+    fighterId           String
+    guessedFighterIds   String  @default("[]")
+    hintsRevealed       Boolean @default(false)
 
     @@unique([userId, playedDate])
 }
