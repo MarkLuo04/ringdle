@@ -1,7 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
-import type { BoxingDataFighter, BoxingDataFighterTitle } from "./types/boxing-data.types";
+import type {
+  BoxingDataFighter,
+  BoxingDataFighterTitle,
+} from "./types/boxing-data.types";
 import type { Fighter } from "../../../../generated/prisma";
 
 function toBoxingDataFighter(f: Fighter): BoxingDataFighter {
@@ -57,44 +60,42 @@ export const boxingRouter = createTRPCRouter({
     }),
 
   // Get a random fighter from the database
-  getRandomFighter: publicProcedure
-    .query(async () => {
-      const fighters = await db.fighter.findMany();
+  getRandomFighter: publicProcedure.query(async () => {
+    const fighters = await db.fighter.findMany();
 
-      if (fighters.length === 0) {
-        throw new Error("No fighters in database");
-      }
+    if (fighters.length === 0) {
+      throw new Error("No fighters in database");
+    }
 
-      const random = fighters[Math.floor(Math.random() * fighters.length)]!;
-      return toBoxingDataFighter(random);
-    }),
+    const random = fighters[Math.floor(Math.random() * fighters.length)]!;
+    return toBoxingDataFighter(random);
+  }),
 
   // Get the daily fighter
   // Fighters are ordered by dailyOrder (assigned at seed time) so the cycle is stable
-  getDailyFighter: publicProcedure
-    .query(async () => {
-      const fighters = await db.fighter.findMany({
-        where: { dailyOrder: { not: null } },
-        orderBy: { dailyOrder: "asc" },
-      });
+  getDailyFighter: publicProcedure.query(async () => {
+    const fighters = await db.fighter.findMany({
+      where: { dailyOrder: { not: null } },
+      orderBy: { dailyOrder: "asc" },
+    });
 
-      if (fighters.length === 0) {
-        throw new Error("No fighters with dailyOrder in database");
-      }
+    if (fighters.length === 0) {
+      throw new Error("No fighters with dailyOrder in database");
+    }
 
-      const dayNumber = Math.floor(Date.now() / 86_400_000);
-      const fighter = fighters[dayNumber % fighters.length]!;
-      const dateString = new Date().toISOString().slice(0, 10);
+    const dayNumber = Math.floor(Date.now() / 86_400_000);
+    const fighter = fighters[dayNumber % fighters.length]!;
+    const dateString = new Date().toISOString().slice(0, 10);
 
-      return { fighter: toBoxingDataFighter(fighter), dateString };
-    }),
-  
-  // Search for a fighter by name 
+    return { fighter: toBoxingDataFighter(fighter), dateString };
+  }),
+
+  // Search for a fighter by name
   searchFighters: publicProcedure
     .input(z.object({ query: z.string().min(1) }))
     .query(async ({ input }) => {
       const fighters = await db.fighter.findMany({
-        where: { name: { contains: input.query} },
+        where: { name: { contains: input.query } },
         take: 10,
       });
       return fighters.map(toBoxingDataFighter);

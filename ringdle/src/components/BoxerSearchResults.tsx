@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { skipToken } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { compareFighters } from "~/lib/compareFighters";
 import { BoxerSearchBar } from "~/components/BoxerSearchBar";
@@ -10,6 +11,7 @@ import { useLocalStorage } from "~/hooks/useLocalStorage";
 import { Button } from "~/components/retroui/Button";
 import { HelpModal } from "~/components/HelpModal";
 import { HintsPanel } from "~/components/HintsPanel";
+import { StatsModal } from "~/components/StatsModal";
 
 const MAX_GUESSES = 8;
 
@@ -20,31 +22,66 @@ function getTodayUTC(): string {
 function msUntilMidnightUTC(): number {
   const now = new Date();
   const midnight = new Date(
-    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1),
   );
   return midnight.getTime() - now.getTime();
 }
 
 function formatCountdown(ms: number): string {
   const totalSecs = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(totalSecs / 3600).toString().padStart(2, "0");
-  const m = Math.floor((totalSecs % 3600) / 60).toString().padStart(2, "0");
+  const h = Math.floor(totalSecs / 3600)
+    .toString()
+    .padStart(2, "0");
+  const m = Math.floor((totalSecs % 3600) / 60)
+    .toString()
+    .padStart(2, "0");
   const s = (totalSecs % 60).toString().padStart(2, "0");
   return `${h}:${m}:${s}`;
 }
 
 export function BoxerSearchResults() {
-  const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>("ringdle-guesses", []);
-  const [gameWon, setGameWon]                 = useLocalStorage<boolean>("ringdle-won", false);
-  const [gameLost, setGameLost]               = useLocalStorage<boolean>("ringdle-lost", false);
-  const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>("ringdle-target-id", null);
-  const [hintsRevealed, setHintsRevealed]     = useLocalStorage<boolean>("ringdle-hints-revealed", false);
-  const [storedDate, setStoredDate]           = useLocalStorage<string | null>("ringdle-date", null);
+  const { data: session } = useSession();
+  const utils = api.useUtils();
+
+  const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>(
+    "ringdle-guesses",
+    [],
+  );
+  const [gameWon, setGameWon] = useLocalStorage<boolean>("ringdle-won", false);
+  const [gameLost, setGameLost] = useLocalStorage<boolean>(
+    "ringdle-lost",
+    false,
+  );
+  const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>(
+    "ringdle-target-id",
+    null,
+  );
+  const [hintsRevealed, setHintsRevealed] = useLocalStorage<boolean>(
+    "ringdle-hints-revealed",
+    false,
+  );
+  const [storedDate, setStoredDate] = useLocalStorage<string | null>(
+    "ringdle-date",
+    null,
+  );
 
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [searchKey, setSearchKey] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
-  const [countdown, setCountdown] = useState<string>(formatCountdown(msUntilMidnightUTC()));
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [countdown, setCountdown] = useState<string>(
+    formatCountdown(msUntilMidnightUTC()),
+  );
+  const resultRecordedRef = useRef(false);
+
+  const recordResult = api.stats.recordResult.useMutation({
+    onSuccess: () => {
+      void utils.stats.getMyStats.invalidate();
+    },
+    onError: () => {
+      resultRecordedRef.current = false;
+    },
+  });
 
   // On mount: read the stored date directly from localStorage
   useEffect(() => {
@@ -53,7 +90,9 @@ export function BoxerSearchResults() {
     try {
       const item = window.localStorage.getItem("ringdle-date");
       if (item !== null) rawDate = JSON.parse(item) as string;
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
 
     if (rawDate !== today) {
       setGuessedFighters([]);
@@ -62,6 +101,7 @@ export function BoxerSearchResults() {
       setTargetFighterId(null);
       setHintsRevealed(false);
       setStoredDate(null);
+      resultRecordedRef.current = false;
     }
   }, []);
 
@@ -93,10 +133,11 @@ export function BoxerSearchResults() {
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
       refetchOnMount: false,
-    }
+    },
   );
 
-  const targetFighter = targetFighterId !== null ? storedFighter : dailyData?.fighter;
+  const targetFighter =
+    targetFighterId !== null ? storedFighter : dailyData?.fighter;
 
   // Persist the daily fighter's ID and today's date the first time it resolves
   useEffect(() => {
@@ -109,12 +150,16 @@ export function BoxerSearchResults() {
   // Log target fighter for debugging
   useEffect(() => {
     if (targetFighter) {
-      console.log("[Ringdle] Target fighter:", targetFighter.name, targetFighter);
+      console.log(
+        "[Ringdle] Target fighter:",
+        targetFighter.name,
+        targetFighter,
+      );
     }
   }, [targetFighter]);
 
   const { data: fetchedFighter } = api.boxing.getFighterById.useQuery(
-    pendingId !== null ? { id: pendingId } : skipToken
+    pendingId !== null ? { id: pendingId } : skipToken,
   );
 
   // Handle fetched fighter from search bar
@@ -133,17 +178,44 @@ export function BoxerSearchResults() {
     const won = Object.values(result).every((c) => c.status === "correct");
 
     // Update guessed fighters and game state
-    const nextGuesses = [...guessedFighters, { fighter: fetchedFighter, result }];
+    const nextGuesses = [
+      ...guessedFighters,
+      { fighter: fetchedFighter, result },
+    ];
     setGuessedFighters(nextGuesses);
-    if (won) {
+
+    const endedWin = won;
+    const endedLoss = !won && nextGuesses.length >= MAX_GUESSES;
+
+    if (endedWin) {
       setGameWon(true);
-    } else if (nextGuesses.length >= MAX_GUESSES) {
+    } else if (endedLoss) {
       setGameLost(true);
+    }
+
+    if (endedWin || endedLoss) {
+      const playedDate = storedDate ?? dailyData?.dateString ?? getTodayUTC();
+      if (session?.user && !resultRecordedRef.current && targetFighter?.id) {
+        resultRecordedRef.current = true;
+        recordResult.mutate({
+          won: endedWin,
+          guesses: nextGuesses.length,
+          fighterId: targetFighter.id,
+          playedDate,
+        });
+      }
     }
 
     setPendingId(null);
     setSearchKey((k) => k + 1);
-  }, [fetchedFighter, targetFighter]);
+  }, [
+    fetchedFighter,
+    targetFighter,
+    guessedFighters,
+    session?.user,
+    storedDate,
+    dailyData?.dateString,
+  ]);
 
   // Handle select from search bar
   function handleSelect(id: string) {
@@ -155,11 +227,20 @@ export function BoxerSearchResults() {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-5xl">
+    <div className="flex w-full max-w-5xl flex-col gap-6">
       <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
+      <StatsModal open={statsOpen} onClose={() => setStatsOpen(false)} />
 
-      {/* Help button */}
-      <div className="flex justify-end">
+      {/* Stats & Help */}
+      <div className="flex justify-end gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setStatsOpen(true)}
+          aria-label="Your stats"
+        >
+          Stats
+        </Button>
         <Button
           variant="outline"
           size="sm"
@@ -178,7 +259,8 @@ export function BoxerSearchResults() {
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
           <p className="text-sm text-green-600 dark:text-green-400">
-            Next puzzle in <span className="font-mono font-bold">{countdown}</span>
+            Next puzzle in{" "}
+            <span className="font-mono font-bold">{countdown}</span>
           </p>
         </div>
       )}
@@ -191,7 +273,8 @@ export function BoxerSearchResults() {
             <span className="font-bold">{targetFighter?.name}</span>.
           </p>
           <p className="text-sm text-red-600 dark:text-red-400">
-            Next puzzle in <span className="font-mono font-bold">{countdown}</span>
+            Next puzzle in{" "}
+            <span className="font-mono font-bold">{countdown}</span>
           </p>
         </div>
       )}

@@ -73,7 +73,7 @@ export function CheckEmail({ email }: { email: string }) {
             )}
             . Click the link to activate your account.
           </Text>
-          <Text as="p" className="text-sm text-muted-foreground">
+          <Text as="p" className="text-muted-foreground text-sm">
             The link expires in 24 hours. If you don&apos;t see it, check your
             spam folder.
           </Text>
@@ -88,7 +88,7 @@ export function CheckEmail({ email }: { email: string }) {
 
         {/* Error message */}
         {error && (
-          <Text as="p" className="text-sm text-destructive">
+          <Text as="p" className="text-destructive text-sm">
             {error}
           </Text>
         )}

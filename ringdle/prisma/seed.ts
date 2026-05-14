@@ -6,7 +6,6 @@ const db = new PrismaClient();
 const API_HOST = process.env.BOXING_DATA_API_HOST;
 const API_KEY = process.env.BOXING_DATA_API_KEY;
 
-
 const FIGHTER_NAMES = [
   "Naoya Inoue",
   "Oleksandr Usyk",
@@ -105,7 +104,7 @@ const FIGHTER_NAMES = [
   "Willie Pep",
   "Muhammad Ali",
   "Henry Armstrong",
-  "Sugar Ray Robinson"
+  "Sugar Ray Robinson",
 ];
 
 // Pause between API calls for rate limits
@@ -251,7 +250,9 @@ async function main() {
   }
 
   // Log the results
-  console.log(`\nDone. Saved: ${saved}, Skipped: ${skipped}, Failed: ${failed}`);
+  console.log(
+    `\nDone. Saved: ${saved}, Skipped: ${skipped}, Failed: ${failed}`,
+  );
 }
 
 main()

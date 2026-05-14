@@ -64,6 +64,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    stats         UserStats?
+    gameResults   GameResult[]
 }
 
 model VerificationToken {
@@ -72,6 +74,30 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model UserStats {
+    id                 String  @id @default(cuid())
+    userId             String  @unique
+    user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    gamesPlayed        Int     @default(0)
+    gamesWon           Int     @default(0)
+    currentStreak      Int     @default(0)
+    longestStreak      Int     @default(0)
+    totalGuessesOnWins Int     @default(0)
+    lastPlayedDate     String?
+}
+
+model GameResult {
+    id         String  @id @default(cuid())
+    userId     String
+    user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    playedDate String
+    won        Boolean
+    guesses    Int
+    fighterId  String
+
+    @@unique([userId, playedDate])
 }
 
 // Fighter model for database seeding
