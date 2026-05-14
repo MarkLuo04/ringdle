@@ -1,10 +1,5 @@
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import Credentials from "next-auth/providers/credentials";
-
-import { db } from "~/server/db";
-import { verifyPassword } from "~/server/auth/utils";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -28,34 +23,14 @@ declare module "next-auth" {
 }
 
 /**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
+ * Edge-safe NextAuth config — no Node.js-only imports (no crypto, no Prisma).
+ * Used by middleware to validate JWT tokens in the Edge Runtime.
+ * The full config (with Credentials provider and PrismaAdapter) lives in index.ts.
  *
- * @see https://next-auth.js.org/configuration/options
+ * @see https://nextjs.org/docs/messages/node-module-in-edge-runtime
  */
 export const authConfig = {
-  providers: [
-    DiscordProvider,
-    Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        const email = credentials?.email as string | undefined;
-        const password = credentials?.password as string | undefined;
-        if (!email || !password) return null;
-
-        const user = await db.user.findUnique({ where: { email } });
-        if (!user?.password) return null;
-
-        const valid = await verifyPassword(password, user.password);
-        if (!valid) return null;
-
-        return { id: user.id, name: user.name, email: user.email, image: user.image };
-      },
-    }),
-  ],
-  adapter: PrismaAdapter(db),
+  providers: [DiscordProvider],
   session: { strategy: "jwt" },
   callbacks: {
     jwt: ({ token, user }) => {

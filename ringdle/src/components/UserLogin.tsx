@@ -80,10 +80,14 @@ export function UserLogin() {
             </Text>
           )}
 
-          {/* Sign in button */}
-          <Button type="submit" size="lg" className="w-full" disabled={loading}>
-            {loading ? "Signing in…" : "Sign in"}
-          </Button>
+          <div className="flex flex-col gap-2 pt-1">
+            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+              {loading ? "Signing in…" : "Sign in"}
+            </Button>
+            <Button asChild variant="ghost" size="lg" className="w-full">
+              <Link href="/">Back to home</Link>
+            </Button>
+          </div>
 
           <Text as="p" className="text-center text-sm">
             Don&apos;t have an account?{" "}
