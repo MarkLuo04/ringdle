@@ -120,7 +120,14 @@ export function BoxerSearchResults() {
       lastServerHydrateKeyRef.current = null;
       postLoginSyncSentRef.current = null;
     }
-  }, []);
+  }, [
+    setGuessedFighters,
+    setGameWon,
+    setGameLost,
+    setTargetFighterId,
+    setHintsRevealed,
+    setStoredDate,
+  ]);
 
   // Countdown timer — only ticks while the game is over
   useEffect(() => {
@@ -136,9 +143,10 @@ export function BoxerSearchResults() {
     if (!session?.user || serverTodayPending) return;
 
     const row = serverTodayGame;
-    if (!row || row.playedDate !== playedDateToday) return;
+    if (row?.playedDate !== playedDateToday) return;
 
-    const finished = row.won || row.guesses >= MAX_GUESSES;
+    const finished =
+      row.won === true || row.guesses >= MAX_GUESSES;
     if (!finished) return;
 
     const hydrateKey = `${row.playedDate}:${row.guesses}:${row.guessedFighterIds.join("|")}:${row.hintsRevealed}`;
@@ -236,6 +244,7 @@ export function BoxerSearchResults() {
     hintsRevealed,
     syncCompletedGame.isPending,
     syncCompletedGame.mutate,
+    syncCompletedGame,
   ]);
 
   // Fetch today's daily fighter when there is no active game for today
@@ -269,7 +278,7 @@ export function BoxerSearchResults() {
       setTargetFighterId(dailyData.fighter.id);
       setStoredDate(dailyData.dateString);
     }
-  }, [dailyData]);
+  }, [dailyData, targetFighterId, setTargetFighterId, setStoredDate]);
 
   // Log target fighter for debugging
   useEffect(() => {
@@ -342,6 +351,10 @@ export function BoxerSearchResults() {
     storedDate,
     dailyData?.dateString,
     hintsRevealed,
+    syncCompletedGame,
+    setGuessedFighters,
+    setGameWon,
+    setGameLost,
   ]);
 
   // Handle select from search bar
