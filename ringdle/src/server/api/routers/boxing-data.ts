@@ -1,6 +1,8 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
+import { getTodayUTC, isValidArchiveDate } from "~/lib/ringdleGame";
 import type {
   BoxingDataFighter,
   BoxingDataFighterTitle,
@@ -72,11 +74,27 @@ export const boxingRouter = createTRPCRouter({
     return toBoxingDataFighter(random);
   }),
 
-  getDailyFighter: publicProcedure.query(async () => {
-    const dateString = new Date().toISOString().slice(0, 10);
-    const { fighter } = await getDailyFighterRecordForUtcDate(dateString);
-    return { fighter: toBoxingDataFighter(fighter), dateString };
-  }),
+  // Get the daily fighter for a given date
+  getDailyFighter: publicProcedure
+    .input(
+      z
+        .object({
+          playedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+        })
+        .optional(),
+    )
+    .query(async ({ input }) => {
+      // get the date string for the daily fighter
+      const dateString = input?.playedDate ?? getTodayUTC();
+      if (input?.playedDate && !isValidArchiveDate(input.playedDate)) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Date out of archive range.",
+        });
+      }
+      const { fighter } = await getDailyFighterRecordForUtcDate(dateString);
+      return { fighter: toBoxingDataFighter(fighter), dateString };
+    }),
 
   // Search for a fighter by name
   searchFighters: publicProcedure
