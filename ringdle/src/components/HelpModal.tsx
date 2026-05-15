@@ -56,12 +56,11 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
                 Type a boxer&apos;s name in the search bar and select them from
                 the dropdown.
               </li>
-              <li>
-                Each guess reveals feedback for every attribute.
-              </li>
+              <li>Each guess reveals feedback for every attribute.</li>
               <li>Hints are available after 4 guesses.</li>
               <li>
-                The game ends when you guess the mystery boxer correctly or when you run out of guesses!
+                The game ends when you guess the mystery boxer correctly or when
+                you run out of guesses!
               </li>
             </ul>
           </section>
@@ -82,9 +81,7 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
                 <span className="inline-block w-20 shrink-0 rounded border-2 border-black bg-amber-500 px-2 py-1 text-center text-sm font-semibold text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   Close
                 </span>
-                <Text as="p">
-                  Close match
-                </Text>
+                <Text as="p">Close match</Text>
               </div>
               <div className="flex items-center gap-3">
                 <span className="inline-block w-20 shrink-0 rounded border-2 border-black px-2 py-1 text-center text-sm font-semibold shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
@@ -102,7 +99,8 @@ export function HelpModal({ open, onClose }: HelpModalProps) {
             </Text>
             <ul className="list-inside list-disc space-y-1 font-sans text-base">
               <li>
-                <strong>Division</strong> — within 15 lbs (roughly 2-3 weight classes apart).
+                <strong>Division</strong> — within 15 lbs (roughly 2-3 weight
+                classes apart).
               </li>
               <li>
                 <strong>Height</strong> — within 2 inches.

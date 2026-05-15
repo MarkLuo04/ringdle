@@ -6,8 +6,12 @@ import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { compareFighters } from "~/lib/compareFighters";
 import type { GuessEntry } from "~/components/BoxerGuessTable";
-import { useLocalStorage } from "~/hooks/useLocalStorage";
-import { MAX_GUESSES, getTodayUTC } from "~/lib/ringdleGame";
+import { useGameStorage } from "~/hooks/useGameStorage";
+import {
+  MAX_GUESSES,
+  archiveStoragePrefix,
+  getTodayUTC,
+} from "~/lib/ringdleGame";
 import type { BoxingDataFighter } from "~/server/api/routers/types/boxing-data.types";
 
 export type RingdleGameMode = "daily" | "archive";
@@ -16,7 +20,8 @@ export type RingdleGameMode = "daily" | "archive";
 export type UseRingdleGameOptions = {
   mode: RingdleGameMode;
   playedDate: string;
-  storagePrefix: string;
+  /** Required for daily mode; archive games are ephemeral (in-memory only). */
+  storagePrefix?: string;
 };
 
 // calculate the time until midnight UTC
@@ -48,6 +53,12 @@ export function useRingdleGame({
   storagePrefix,
 }: UseRingdleGameOptions) {
   const isDaily = mode === "daily";
+  if (isDaily && !storagePrefix) {
+    throw new Error("storagePrefix is required for daily mode");
+  }
+  const persist = isDaily;
+  const storageKey = (suffix: string) => `${storagePrefix ?? "ringdle"}-${suffix}`;
+
   const { data: session } = useSession();
   const utils = api.useUtils();
   const playedDateToday = getTodayUTC();
@@ -62,28 +73,26 @@ export function useRingdleGame({
       },
     );
 
-  const [guessedFighters, setGuessedFighters] = useLocalStorage<GuessEntry[]>(
-    `${storagePrefix}-guesses`,
+  const [guessedFighters, setGuessedFighters] = useGameStorage<GuessEntry[]>(
+    persist,
+    storageKey("guesses"),
     [],
   );
-  const [gameWon, setGameWon] = useLocalStorage<boolean>(
-    `${storagePrefix}-won`,
-    false,
-  );
-  const [gameLost, setGameLost] = useLocalStorage<boolean>(
-    `${storagePrefix}-lost`,
-    false,
-  );
-  const [targetFighterId, setTargetFighterId] = useLocalStorage<string | null>(
-    `${storagePrefix}-target-id`,
+  const [gameWon, setGameWon] = useGameStorage(persist, storageKey("won"), false);
+  const [gameLost, setGameLost] = useGameStorage(persist, storageKey("lost"), false);
+  const [targetFighterId, setTargetFighterId] = useGameStorage<string | null>(
+    persist,
+    storageKey("target-id"),
     null,
   );
-  const [hintsRevealed, setHintsRevealed] = useLocalStorage<boolean>(
-    `${storagePrefix}-hints-revealed`,
+  const [hintsRevealed, setHintsRevealed] = useGameStorage(
+    persist,
+    storageKey("hints-revealed"),
     false,
   );
-  const [storedDate, setStoredDate] = useLocalStorage<string | null>(
-    `${storagePrefix}-date`,
+  const [storedDate, setStoredDate] = useGameStorage<string | null>(
+    persist,
+    storageKey("date"),
     null,
   );
 
@@ -108,9 +117,29 @@ export function useRingdleGame({
     },
   });
 
+  // Remove legacy persisted archive state (archive is ephemeral now).
+  useEffect(() => {
+    if (isDaily) return;
+    const prefix = archiveStoragePrefix(playedDate);
+    for (const suffix of [
+      "guesses",
+      "won",
+      "lost",
+      "target-id",
+      "hints-revealed",
+      "date",
+    ] as const) {
+      try {
+        window.localStorage.removeItem(`${prefix}-${suffix}`);
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [isDaily, playedDate]);
+
   // reset the game state when the date changes
   useEffect(() => {
-    if (!isDaily) return;
+    if (!isDaily || !storagePrefix) return;
 
     const today = getTodayUTC();
     let rawDate: string | null = null;

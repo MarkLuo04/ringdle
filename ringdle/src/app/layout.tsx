@@ -35,7 +35,16 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-      <html lang="en" className={cn(geist.variable, archivoBlack.variable, spaceGrotesk.variable, "font-sans", "dark")}>
+    <html
+      lang="en"
+      className={cn(
+        geist.variable,
+        archivoBlack.variable,
+        spaceGrotesk.variable,
+        "font-sans",
+        "dark",
+      )}
+    >
       <body>
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
