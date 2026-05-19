@@ -29,7 +29,7 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
   return (
     <RingdleGameProvider value={game}>
       {/* Main container for the game */}
-      <div className="flex w-full max-w-5xl flex-col gap-6">
+      <div className="flex w-full max-w-6xl flex-col gap-6">
         <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
         <StatsModal open={statsOpen} onClose={() => setStatsOpen(false)} />
         <ArchiveModal
@@ -80,7 +80,7 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
 
         {/* Archive label for the archive page */}
         {!game.isDaily && (
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-muted-foreground text-center text-base">
             Archive · {archiveLabel}
             <span className="mx-2">·</span>
             <Link href="/" className="hover:text-foreground underline">

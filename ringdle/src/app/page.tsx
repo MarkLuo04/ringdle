@@ -7,11 +7,11 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <div className="flex flex-col gap-8 md:gap-16 justify-center items-center mt-8 md:mt-16 w-full px-4 sm:px-6">
+    <div className="mt-8 flex w-full flex-col items-center justify-center gap-8 px-4 sm:px-6 md:mt-16 md:gap-16">
       {/* Header */}
       <header className="relative w-full text-center">
         {/* Sign in / sign out button */}
-        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+        <div className="absolute top-1/2 right-0 -translate-y-1/2">
           {session ? (
             <form
               action={async () => {
@@ -30,8 +30,12 @@ export default async function Home() {
           )}
         </div>
 
-        <h1 className="text-5xl sm:text-7xl font-extrabold tracking-tight text-primary">Ringdle</h1>
-        <p className="mt-2 text-base sm:text-lg text-muted-foreground tracking-widest uppercase">Guess the boxer</p>
+        <h1 className="text-primary text-5xl font-extrabold tracking-tight sm:text-7xl">
+          Ringdle
+        </h1>
+        <p className="text-muted-foreground mt-2 text-base tracking-widest uppercase sm:text-lg">
+          Guess the boxer
+        </p>
       </header>
 
       {/* search bar and results table*/}

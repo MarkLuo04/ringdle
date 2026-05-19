@@ -75,13 +75,18 @@ export function UserLogin() {
 
           {/* Error message */}
           {error && (
-            <Text as="p" className="text-sm text-destructive">
+            <Text as="p" className="text-destructive text-sm">
               {error}
             </Text>
           )}
 
           <div className="flex flex-col gap-2 pt-1">
-            <Button type="submit" size="lg" className="w-full" disabled={loading}>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full"
+              disabled={loading}
+            >
               {loading ? "Signing in…" : "Sign in"}
             </Button>
             <Button asChild variant="ghost" size="lg" className="w-full">

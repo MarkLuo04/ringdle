@@ -57,7 +57,8 @@ export function useRingdleGame({
     throw new Error("storagePrefix is required for daily mode");
   }
   const persist = isDaily;
-  const storageKey = (suffix: string) => `${storagePrefix ?? "ringdle"}-${suffix}`;
+  const storageKey = (suffix: string) =>
+    `${storagePrefix ?? "ringdle"}-${suffix}`;
 
   const { data: session } = useSession();
   const utils = api.useUtils();
@@ -78,8 +79,16 @@ export function useRingdleGame({
     storageKey("guesses"),
     [],
   );
-  const [gameWon, setGameWon] = useGameStorage(persist, storageKey("won"), false);
-  const [gameLost, setGameLost] = useGameStorage(persist, storageKey("lost"), false);
+  const [gameWon, setGameWon] = useGameStorage(
+    persist,
+    storageKey("won"),
+    false,
+  );
+  const [gameLost, setGameLost] = useGameStorage(
+    persist,
+    storageKey("lost"),
+    false,
+  );
   const [targetFighterId, setTargetFighterId] = useGameStorage<string | null>(
     persist,
     storageKey("target-id"),

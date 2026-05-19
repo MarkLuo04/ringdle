@@ -12,7 +12,11 @@ interface BoxerSearchBarProps {
   rightLabel?: React.ReactNode;
 }
 
-export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: BoxerSearchBarProps) {
+export function BoxerSearchBar({
+  onSelect,
+  disabled = false,
+  rightLabel,
+}: BoxerSearchBarProps) {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -22,10 +26,10 @@ export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: Boxer
   // Fetch suggestions from API
   const { data: suggestions } = api.boxing.suggestFighters.useQuery(
     { query: debouncedInput },
-    { enabled: debouncedInput.length >= 2 }
+    { enabled: debouncedInput.length >= 2 },
   );
 
-  // Handle select from search bar 
+  // Handle select from search bar
   function handleSelect(id: string) {
     onSelect(id);
   }
@@ -34,8 +38,10 @@ export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: Boxer
   return (
     <Field>
       <div className="flex items-center justify-between">
-        <FieldLabel>Search for a boxer</FieldLabel>
-        {rightLabel && <span className="text-sm text-muted-foreground">{rightLabel}</span>}
+        <FieldLabel className="text-base">Search for a boxer</FieldLabel>
+        {rightLabel && (
+          <span className="text-muted-foreground text-base">{rightLabel}</span>
+        )}
       </div>
       <div className="relative">
         <Input
@@ -48,23 +54,25 @@ export function BoxerSearchBar({ onSelect, disabled = false, rightLabel }: Boxer
             setShowSuggestions(true);
           }}
           onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-          onFocus={() => { if (inputValue.length >= 2) setShowSuggestions(true); }}
-          className="w-full"
+          onFocus={() => {
+            if (inputValue.length >= 2) setShowSuggestions(true);
+          }}
+          className="w-full text-base"
         />
 
         {/* Live search suggestions */}
         {showSuggestions && suggestions && suggestions.length > 0 && (
-          <ul className="absolute z-10 w-full mt-1 rounded-md border bg-popover shadow-md">
+          <ul className="bg-popover absolute z-10 mt-1 w-full rounded-md border shadow-md">
             {suggestions.map((s) => (
               <li key={s.id}>
                 <button
                   type="button"
-                  className="w-full px-4 py-2 text-left text-sm hover:bg-muted transition-colors"
+                  className="hover:bg-muted w-full px-4 py-3 text-left text-base font-medium transition-colors"
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => handleSelect(s.id)}
                 >
                   {s.name}
-                  <span className="ml-2 text-muted-foreground text-xs">
+                  <span className="text-muted-foreground ml-2 text-sm font-normal">
                     {s.divisionName}
                   </span>
                 </button>

@@ -65,53 +65,53 @@
 }
 
 :root {
-  --bg-image: url('../../public/images/boxing_ring.jpg');
+  --bg-image: url("../../public/images/boxing_ring.jpg");
   --radius: 0.5rem;
-  --background: #FFF8E7;
+  --background: #fff8e7;
   --foreground: #1a0a00;
-  --muted: #F5E6C8;
-  --muted-foreground: #8B4513;
-  --card: #FFFDF5;
+  --muted: #f5e6c8;
+  --muted-foreground: #8b4513;
+  --card: #fffdf5;
   --card-foreground: #1a0a00;
-  --popover: #FFFDF5;
+  --popover: #fffdf5;
   --popover-foreground: #1a0a00;
   --border: #000000;
   --shadow-color: #000000;
-  --input: #FFFDF5;
-  --primary: #C8102E;
-  --primary-hover: #9B0020;
-  --primary-foreground: #FFFFFF;
-  --secondary: #FFD700;
+  --input: #fffdf5;
+  --primary: #c8102e;
+  --primary-hover: #9b0020;
+  --primary-foreground: #ffffff;
+  --secondary: #ffd700;
   --secondary-foreground: #1a0a00;
-  --accent: #F5C518;
+  --accent: #f5c518;
   --accent-foreground: #1a0a00;
-  --destructive: #9B0020; 
-  --destructive-foreground: #FFFFFF;
-  --ring: #C8102E;
+  --destructive: #9b0020;
+  --destructive-foreground: #ffffff;
+  --ring: #c8102e;
 }
 
 .dark {
   --background: #0d0a00;
-  --foreground: #F5E6C8;
+  --foreground: #f5e6c8;
   --muted: #2a1a00;
-  --muted-foreground: #C8A45A;
+  --muted-foreground: #c8a45a;
   --card: #1a1200;
-  --card-foreground: #F5E6C8;
+  --card-foreground: #f5e6c8;
   --popover: #1a1200;
-  --popover-foreground: #F5E6C8;
+  --popover-foreground: #f5e6c8;
   --border: #e40e31;
   --shadow-color: #1a0d00;
   --input: #1a1200;
   --primary: #ec062d;
-  --primary-hover: #9B0020;
-  --primary-foreground: #FFFFFF;
-  --secondary: #FFD700;
+  --primary-hover: #9b0020;
+  --primary-foreground: #ffffff;
+  --secondary: #ffd700;
   --secondary-foreground: #1a0a00;
   --accent: #3a2800;
-  --accent-foreground: #FFD700;
-  --destructive: #9B0020;
-  --destructive-foreground: #FFFFFF;
-  --ring: #FFD700;
+  --accent-foreground: #ffd700;
+  --destructive: #9b0020;
+  --destructive-foreground: #ffffff;
+  --ring: #ffd700;
 }
 
 @layer base {
