@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-/** In-memory state, or persisted to localStorage when `persist` is true. */
+// In-memory state, or persisted to localStorage when `persist` is true 
 export function useGameStorage<T>(
   persist: boolean,
   key: string,

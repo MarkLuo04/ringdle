@@ -8,6 +8,7 @@ import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button";
 import { Text } from "@/components/retroui/Text";
 import { Input } from "@/components/retroui/Input";
+import { AuthPageClose } from "@/components/AuthPageClose";
 
 export function UserLogin() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export function UserLogin() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (loading) return;
     setError(null);
     setLoading(true);
 
@@ -42,8 +44,9 @@ export function UserLogin() {
   return (
     // Login form
     <Card className="w-full max-w-sm">
-      <Card.Header className="pb-1">
-        <Card.Title>Sign in to Ringdle</Card.Title>
+      <Card.Header className="flex-row items-center justify-between pb-1">
+        <Card.Title className="mb-0">Sign in to Ringdle</Card.Title>
+        <AuthPageClose />
       </Card.Header>
       <Card.Content>
         {/* Email input */}
@@ -89,13 +92,11 @@ export function UserLogin() {
             >
               {loading ? "Signing in…" : "Sign in"}
             </Button>
-            <Button asChild variant="ghost" size="lg" className="w-full">
-              <Link href="/">Back to home</Link>
-            </Button>
           </div>
 
           <Text as="p" className="text-center text-sm">
-            Don&apos;t have an account?{" "}
+            Don&apos;t have an account?
+            <br />
             <Link href="/register" className="underline">
               Create one
             </Link>

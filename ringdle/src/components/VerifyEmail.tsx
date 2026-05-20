@@ -79,7 +79,7 @@ export function VerifyEmail({ token }: { token: string }) {
         <Card.Title>Verification failed</Card.Title>
       </Card.Header>
       <Card.Content className="flex flex-col gap-4">
-        <Text as="p" className="text-sm text-destructive">
+        <Text as="p" className="text-destructive text-sm">
           {verify.error?.message ?? "Something went wrong."}
         </Text>
         <Button asChild size="lg" className="w-full">

@@ -402,6 +402,7 @@ export function useRingdleGame({
 
   // handle the selection of a fighter
   function handleSelect(id: string) {
+    if (gameWon || gameLost || pendingId !== null) return;
     if (!guessedFighters.some((e) => e.fighter.id === id)) {
       setPendingId(id);
     } else {

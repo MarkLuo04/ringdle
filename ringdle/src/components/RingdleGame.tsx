@@ -38,12 +38,15 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
         />
 
         {/* Buttons for the game */}
-        <div className="flex justify-end gap-2">
+        <div
+          className={`grid w-full gap-2 sm:flex sm:w-auto sm:justify-end sm:gap-2 ${game.isDaily ? "grid-cols-3" : "grid-cols-2"}`}
+        >
           {game.isDaily ? (
             <>
               <Button
                 variant="outline"
                 size="sm"
+                className="w-full px-2 sm:w-auto sm:px-3"
                 onClick={() => setStatsOpen(true)}
                 aria-label="Your stats"
               >
@@ -52,6 +55,7 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
               <Button
                 variant="outline"
                 size="sm"
+                className="w-full px-2 sm:w-auto sm:px-3"
                 onClick={() => setArchiveOpen(true)}
                 aria-label="Play past Ringdles"
               >
@@ -62,6 +66,7 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
             <Button
               variant="outline"
               size="sm"
+              className="w-full px-2 sm:w-auto sm:px-3"
               onClick={() => setArchiveOpen(true)}
               aria-label="Play another past Ringdle"
             >
@@ -71,10 +76,12 @@ export function RingdleGame({ children, ...options }: RingdleGameProps) {
           <Button
             variant="outline"
             size="sm"
+            className="w-full px-2 sm:w-auto sm:px-3"
             onClick={() => setHelpOpen(true)}
             aria-label="How to play"
           >
-            ? Help
+            <span className="sm:hidden">?</span>
+            <span className="hidden sm:inline">? Help</span>
           </Button>
         </div>
 

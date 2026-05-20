@@ -66,23 +66,24 @@ export function StatsModal({ open, onClose }: StatsModalProps) {
         {/* Content */}
         <Card.Content className="max-h-[70vh] space-y-4 overflow-y-auto">
           {!loggedIn && (
-            <Text as="p">
-              Logged-in players track Ringdle stats automatically.{" "}
-              <Link
-                href="/login"
-                className="font-semibold underline underline-offset-2"
-              >
-                Log in
-              </Link>{" "}
-              or{" "}
-              <Link
-                href="/register"
-                className="font-semibold underline underline-offset-2"
-              >
-                create an account
-              </Link>{" "}
-              to save yours.
-            </Text>
+            <div className="space-y-1">
+              <Text as="p">
+                <Link
+                  href="/login"
+                  className="font-semibold underline underline-offset-2"
+                >
+                  Log in
+                </Link>{" "}
+                or{" "}
+                <Link
+                  href="/register"
+                  className="font-semibold underline underline-offset-2"
+                >
+                  create an account
+                </Link>{" "}
+                to save your Ringdle stats.
+              </Text>
+            </div>
           )}
 
           {/* Loading state */}

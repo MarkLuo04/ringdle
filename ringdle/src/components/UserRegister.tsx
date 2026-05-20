@@ -8,6 +8,7 @@ import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button";
 import { Text } from "@/components/retroui/Text";
 import { Input } from "@/components/retroui/Input";
+import { AuthPageClose } from "@/components/AuthPageClose";
 import { api } from "~/trpc/react";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -92,8 +93,9 @@ export function UserRegister() {
 
   return (
     <Card className="w-full max-w-sm">
-      <Card.Header className="pb-1">
-        <Card.Title>Create an account</Card.Title>
+      <Card.Header className="flex-row items-center justify-between pb-1">
+        <Card.Title className="mb-0">Create an account</Card.Title>
+        <AuthPageClose />
       </Card.Header>
       <Card.Content>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -170,7 +172,8 @@ export function UserRegister() {
           </Button>
 
           <Text as="p" className="text-center text-sm">
-            Already have an account?{" "}
+            Already have an account?
+            <br />
             <Link href="/login" className="underline">
               Sign in
             </Link>

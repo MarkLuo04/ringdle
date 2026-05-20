@@ -19,6 +19,7 @@ export function BoxerSearchBar({
 }: BoxerSearchBarProps) {
   const [inputValue, setInputValue] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selecting, setSelecting] = useState(false);
 
   // Debounce input to prevent excessive calls
   const debouncedInput = useDebounce(inputValue, 150);
@@ -30,7 +31,11 @@ export function BoxerSearchBar({
   );
 
   // Handle select from search bar
-  function handleSelect(id: string) {
+  function selectFighter(id: string) {
+    if (selecting || disabled) return;
+    setSelecting(true);
+    setShowSuggestions(false);
+    setInputValue("");
     onSelect(id);
   }
 
@@ -48,7 +53,7 @@ export function BoxerSearchBar({
           type="text"
           placeholder="Enter a boxer's name..."
           value={inputValue}
-          disabled={disabled}
+          disabled={disabled || selecting}
           onChange={(e) => {
             setInputValue(e.target.value);
             setShowSuggestions(true);
@@ -67,9 +72,13 @@ export function BoxerSearchBar({
               <li key={s.id}>
                 <button
                   type="button"
-                  className="hover:bg-muted w-full px-4 py-3 text-left text-base font-medium transition-colors"
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => handleSelect(s.id)}
+                  className="hover:bg-muted w-full px-4 py-3 text-left text-base font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={selecting}
+                  onPointerDown={(e) => {
+                    e.preventDefault();
+                    selectFighter(s.id);
+                  }}
+                  onClick={() => selectFighter(s.id)}
                 >
                   {s.name}
                   <span className="text-muted-foreground ml-2 text-sm font-normal">

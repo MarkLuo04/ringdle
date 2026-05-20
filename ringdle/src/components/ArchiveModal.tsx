@@ -43,6 +43,7 @@ export function ArchiveModal({ open, onClose }: ArchiveModalProps) {
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [date, setDate] = useState(getYesterdayUTC());
   const [error, setError] = useState<string | null>(null);
+  const [navigating, setNavigating] = useState(false);
 
   if (!open) return null;
 
@@ -58,11 +59,13 @@ export function ArchiveModal({ open, onClose }: ArchiveModalProps) {
   }
 
   function handlePlay() {
+    if (navigating) return;
     // validate the date
     if (!isValidArchiveDate(date)) {
       setError("Choose a date from launch day through yesterday (UTC).");
       return;
     }
+    setNavigating(true);
     onClose();
     router.push(`/archive/${date}`);
   }
@@ -91,10 +94,13 @@ export function ArchiveModal({ open, onClose }: ArchiveModalProps) {
 
         {/* Archive modal content */}
         <Card.Content className="space-y-4">
-          <Text as="p">
-            Replay a past daily puzzle. Archive games do not count toward your
-            stats and will not be saved.
-          </Text>
+          <div className="space-y-1">
+            <Text as="p">Replay a past daily puzzle.</Text>
+            <Text as="p">
+              Archive games do not count toward your stats and will not be
+              saved.
+            </Text>
+          </div>
           <label className="flex flex-col gap-2">
             <span className="text-sm font-medium">Date (UTC)</span>
             <div className="flex gap-2">
@@ -128,7 +134,7 @@ export function ArchiveModal({ open, onClose }: ArchiveModalProps) {
             </Text>
           )}
           {/* Play button */}
-          <Button className="w-full" onClick={handlePlay}>
+          <Button className="w-full" onClick={handlePlay} disabled={navigating}>
             Play
           </Button>
         </Card.Content>
