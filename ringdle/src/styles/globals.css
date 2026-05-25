@@ -118,22 +118,27 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply text-foreground;
+  html {
+    @apply font-sans;
+    min-height: 100%;
+    background-color: var(--background);
+  }
+  html::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
     background-color: var(--background);
     background-image:
       linear-gradient(oklch(0.11 0.003 260 / 67%), oklch(0.11 0.003 260 / 67%)),
       var(--bg-image, none);
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-repeat: no-repeat;
+    pointer-events: none;
   }
-  @media (max-width: 768px) {
-    body {
-      background-attachment: scroll;
-    }
-  }
-  html {
-    @apply font-sans;
+  body {
+    @apply text-foreground relative min-h-full;
+    background: transparent;
   }
 }
