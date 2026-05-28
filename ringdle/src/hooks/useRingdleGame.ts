@@ -5,7 +5,7 @@ import { skipToken } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
 import { compareFighters } from "~/lib/compareFighters";
-import type { GuessEntry } from "~/components/BoxerGuessTable";
+import type { GuessEntry } from "~/components/ringdle/BoxerGuessTable";
 import { useGameStorage } from "~/hooks/useGameStorage";
 import {
   MAX_GUESSES,
@@ -20,7 +20,7 @@ export type RingdleGameMode = "daily" | "archive";
 export type UseRingdleGameOptions = {
   mode: RingdleGameMode;
   playedDate: string;
-  /** Required for daily mode; archive games are ephemeral (in-memory only). */
+  // Required for daily mode
   storagePrefix?: string;
 };
 
@@ -74,6 +74,7 @@ export function useRingdleGame({
       },
     );
 
+  // states for the game
   const [guessedFighters, setGuessedFighters] = useGameStorage<GuessEntry[]>(
     persist,
     storageKey("guesses"),
@@ -111,10 +112,12 @@ export function useRingdleGame({
   const [countdown, setCountdown] = useState<string>(
     formatCountdown(msUntilMidnightUTC()),
   );
+  // refs for the game state
   const resultRecordedRef = useRef(false);
   const lastServerHydrateKeyRef = useRef<string | null>(null);
   const postLoginSyncSentRef = useRef<string | null>(null);
 
+  // mutation to sync the game state to the server
   const syncCompletedGame = api.stats.syncCompletedGame.useMutation({
     onSuccess: (_result, variables) => {
       postLoginSyncSentRef.current = `${variables.playedDate}:${variables.guessedFighterIds.join("|")}`;
@@ -126,7 +129,7 @@ export function useRingdleGame({
     },
   });
 
-  // Remove legacy persisted archive state (archive is ephemeral now).
+  // Archive game state cleanup
   useEffect(() => {
     if (isDaily) return;
     const prefix = archiveStoragePrefix(playedDate);
@@ -190,6 +193,7 @@ export function useRingdleGame({
     return () => clearInterval(interval);
   }, [isDaily, gameWon, gameLost]);
 
+  // hydrate the game state from the server
   useEffect(() => {
     if (!isDaily || !session?.user || serverTodayPending) return;
 
@@ -214,6 +218,7 @@ export function useRingdleGame({
       return;
     }
 
+    // fetch the guessed fighters from the server
     let cancelled = false;
 
     void (async () => {

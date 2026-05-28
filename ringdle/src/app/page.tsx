@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { auth, signOut } from "~/server/auth";
-import { BoxerSearchResults } from "@/components/BoxerSearchResults";
+import { BoxerSearchResults } from "@/components/ringdle/BoxerSearchResults";
 import { Button } from "@/components/retroui/Button";
 
 export default async function Home() {

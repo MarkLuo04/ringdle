@@ -1,10 +1,10 @@
 "use client";
 
-import { BoxerSearchBar } from "~/components/BoxerSearchBar";
-import { BoxerGuessTable } from "~/components/BoxerGuessTable";
-import { HintsPanel } from "~/components/HintsPanel";
-import { RingdleGame } from "~/components/RingdleGame";
-import { useRingdleGameContext } from "~/components/RingdleGameContext";
+import { BoxerSearchBar } from "~/components/ringdle/BoxerSearchBar";
+import { BoxerGuessTable } from "~/components/ringdle/BoxerGuessTable";
+import { HintsPanel } from "~/components/ringdle/HintsPanel";
+import { RingdleGame } from "~/components/ringdle/RingdleGame";
+import { useRingdleGameContext } from "~/components/ringdle/RingdleGameContext";
 import { MAX_GUESSES, getTodayUTC } from "~/lib/ringdleGame";
 
 // Search bar, hints, and guess table

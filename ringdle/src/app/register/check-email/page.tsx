@@ -1,4 +1,4 @@
-import { CheckEmail } from "@/components/CheckEmail";
+import { CheckEmail } from "@/components/auth/CheckEmail";
 
 export default async function CheckEmailPage({
   searchParams,

@@ -8,7 +8,7 @@ import { Card } from "@/components/retroui/Card";
 import { Button } from "@/components/retroui/Button";
 import { Text } from "@/components/retroui/Text";
 import { Input } from "@/components/retroui/Input";
-import { AuthPageClose } from "@/components/AuthPageClose";
+import { AuthPageClose } from "./AuthPageClose";
 
 export function UserLogin() {
   const router = useRouter();

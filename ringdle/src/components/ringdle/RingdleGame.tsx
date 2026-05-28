@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArchiveModal } from "~/components/ArchiveModal";
-import { HelpModal } from "~/components/HelpModal";
-import { RingdleEndBanner } from "~/components/RingdleEndBanner";
-import { RingdleGameProvider } from "~/components/RingdleGameContext";
-import { StatsModal } from "~/components/StatsModal";
+import { ArchiveModal } from "~/components/modals/ArchiveModal";
+import { HelpModal } from "~/components/modals/HelpModal";
+import { RingdleEndBanner } from "~/components/ringdle/RingdleEndBanner";
+import { RingdleGameProvider } from "~/components/ringdle/RingdleGameContext";
+import { StatsModal } from "~/components/modals/StatsModal";
 import { Button } from "~/components/retroui/Button";
 import {
   useRingdleGame,

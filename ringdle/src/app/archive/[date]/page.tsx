@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { BoxerSearchPlayArea } from "~/components/BoxerSearchResults";
-import { RingdleGame } from "~/components/RingdleGame";
+import { BoxerSearchPlayArea } from "~/components/ringdle/BoxerSearchResults";
+import { RingdleGame } from "~/components/ringdle/RingdleGame";
 import { Button } from "~/components/retroui/Button";
 import { formatArchiveLabel, isValidArchiveDate } from "~/lib/ringdleGame";
 

@@ -14,7 +14,7 @@ export async function getOrderedDailyFighters(): Promise<Fighter[]> {
   return fighters;
 }
 
-/** Epoch-day index */
+// get the UTC day number from a date string
 export function utcDayNumberFromYyyyMmDd(playedDate: string): number {
   const parts = playedDate.split("-").map(Number);
   const y = parts[0] ?? 1970;
@@ -23,6 +23,7 @@ export function utcDayNumberFromYyyyMmDd(playedDate: string): number {
   return Math.floor(Date.UTC(y, m - 1, d) / 86_400_000);
 }
 
+// get the daily fighter record for a given UTC date
 export async function getDailyFighterRecordForUtcDate(
   playedDate: string,
 ): Promise<{ fighter: Fighter; dateString: string }> {
@@ -32,6 +33,7 @@ export async function getDailyFighterRecordForUtcDate(
   return { fighter, dateString: playedDate };
 }
 
+// daily fighter ID
 export async function getDailyFighterIdForUtcDate(
   playedDate: string,
 ): Promise<string> {

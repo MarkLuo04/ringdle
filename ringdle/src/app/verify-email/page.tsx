@@ -1,4 +1,4 @@
-import { VerifyEmail } from "@/components/VerifyEmail";
+import { VerifyEmail } from "@/components/auth/VerifyEmail";
 
 export default async function VerifyEmailPage({
   searchParams,

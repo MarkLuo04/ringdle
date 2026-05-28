@@ -27,6 +27,7 @@ const DIRECTION_COLUMNS = new Set<ColumnKey>([
   "losses",
 ]);
 
+// cell colour based on result status
 function cellBg(status: CellResult["status"]): string {
   const retro =
     "rounded border-2 border-black font-normal shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]";
@@ -40,6 +41,7 @@ function directionArrow(cell: CellResult): "↑" | "↓" | null {
   return cell.direction === "higher" ? "↑" : "↓";
 }
 
+// get the cell value based on the column key
 function getCellValue(fighter: BoxingDataFighter, key: ColumnKey): string {
   switch (key) {
     case "name":
@@ -70,6 +72,7 @@ interface BoxerGuessTableProps {
 export function BoxerGuessTable({ guessedFighters }: BoxerGuessTableProps) {
   if (guessedFighters.length === 0) return null;
 
+  // render the table
   return (
     <Table className="w-max min-w-full">
       <Table.Header>
