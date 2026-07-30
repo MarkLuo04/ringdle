@@ -1,7 +1,5 @@
 # Ringdle
 
-![Ringdle gameplay screenshot](./public/images/ringdle.png)
-
 Wordle, but for boxers. Each day you get a mystery fighter and up to eight guesses. After each guess, attributes like nationality, division, stance, height, and record are compared to the target boxer. 
 
 **Features:** daily puzzles, live boxer search, account sync with stats and streaks, and archive mode for past games.
